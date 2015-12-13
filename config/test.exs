@@ -12,8 +12,6 @@ config :logger, level: :warn
 # Configure your database
 config :dots_web, DotsWeb.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
   database: "dots_web_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
