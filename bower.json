@@ -1,0 +1,22 @@
+{
+  "name": "dots_web",
+  "version": "0.0.0",
+  "authors": [
+    "Joshua Clayton <jclayton@thoughtbot.com>"
+  ],
+  "moduleType": [
+    "es6",
+    "globals"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "react": "~0.14.3"
+  }
+}

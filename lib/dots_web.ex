@@ -11,6 +11,7 @@ defmodule DotsWeb do
       supervisor(DotsWeb.Endpoint, []),
       # Start the Ecto repository
       worker(DotsWeb.Repo, []),
+      supervisor(DotsWeb.Game, [[name: DotsWeb.Game]]),
       # Here you could define other workers and supervisors as children
       # worker(DotsWeb.Worker, [arg1, arg2, arg3]),
     ]

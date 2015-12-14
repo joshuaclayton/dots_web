@@ -2,7 +2,7 @@ defmodule DotsWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", DotsWeb.RoomChannel
+  channel "game", DotsWeb.Channels.GameChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
