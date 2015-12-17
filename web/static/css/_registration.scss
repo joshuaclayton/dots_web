@@ -1,0 +1,40 @@
+.modal {
+  border: 1px solid #ddd;
+  background: #fff;
+  width: 40vw;
+  border-radius: 4px;
+  padding: 2vw;
+  min-width: 30em;
+
+  .title {
+    text-align: center;
+    margin: 0 0 1.5vw;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+form {
+  li {
+    list-style-type: none;
+    margin-bottom: 1em;
+
+    label {
+      display: block;
+      margin: 0 0 .5em;
+    }
+
+    input[type=text] {
+      font-size: 1.5em;
+      padding: .5em;
+      width: calc(100% - 1em);
+    }
+
+    input[type=submit] {
+      text-align: right;
+    }
+  }
+}

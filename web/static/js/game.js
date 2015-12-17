@@ -56,9 +56,7 @@ class Game {
 
       _renderRegistration() {
         return(
-          <section className="registration">
-            <Registration data={this.state.lobby}/>
-          </section>
+          <Registration data={this.state.lobby}/>
         )
       },
 
@@ -140,35 +138,60 @@ class Game {
           boardSelector = "hidden";
         }
 
+        const boardSizes = ["2x2", "5x5", "10x10"];
+
         return(
-          <form onSubmit={this._onSubmit}>
-            <ul>
-              <li>
-                <label htmlFor="player_name">Choose your name</label>
-                <input id="player_name" type="text" />
-              </li>
-              <li className={boardSelector}>
-                <label htmlFor="board_size">Board size</label>
-                <select id="board_size">
-                  <option>2x2</option>
-                  <option>5x5</option>
-                  <option>10x10</option>
-                </select>
-              </li>
-              <li>
-                <input type="submit" value="Start playing"/>
-              </li>
-            </ul>
-          </form>
+          <section className="registration modal">
+            <h2 className="title">Let's get started!</h2>
+            <form onSubmit={this._onSubmit}>
+              <ul>
+                <li>
+                  <label htmlFor="player_name">First, what's your name?</label>
+                  <input id="player_name" type="text" onChange={this._chooseName}/>
+                </li>
+                <li className={boardSelector}>
+                  <label htmlFor="board_size">Next, what board size do you prefer?</label>
+                  <section className="size-selector">
+                    {boardSizes.map(boardSize => {
+                      return <a onClick={this._chooseSize} data-size={boardSize}>{boardSize}</a>
+                    })}
+                  </section>
+                </li>
+                <li>
+                  <input type="submit" value="Game on!" disabled={!this._formComplete()}/>
+                </li>
+              </ul>
+            </form>
+          </section>
         )
       },
 
+      _chooseSize(e) {
+        const chosenSize = e.target.getAttribute("data-size")
+        this.setState({chosenSize: chosenSize});
+        e.preventDefault();
+      },
+
+      _chooseName(e) {
+        this.setState({playerName: e.target.value});
+      },
+
+      _formComplete() {
+        return (this._boardSizeSelected() || this._boardSizeChosen()) && this.state && this.state.playerName;
+      },
+
+      _boardSizeSelected() {
+        return this.state && this.state.chosenSize;
+      },
+
       _onSubmit(e) {
-        const playerName = document.getElementById("player_name").value;
-        const size = document.getElementById("board_size").options[document.getElementById("board_size").selectedIndex].text.split("x");
+        e.preventDefault();
+
+        const playerName = this.state.playerName;
 
         let sizeOptions = {width: 0, height: 0};
         if (!this._boardSizeChosen()) {
+          const size = this.state.chosenSize.split("x");
           sizeOptions.width = size[0];
           sizeOptions.height = size[1];
         }
@@ -181,8 +204,6 @@ class Game {
         );
 
         self.player = playerName;
-
-        e.preventDefault();
       },
 
       _boardSizeChosen() {
@@ -194,7 +215,6 @@ class Game {
       render() {
         return(
           <section className="board">
-            <h2>Board ({this.props.data.width}x{this.props.data.height})</h2>
             <SquaresList data={this.props.data} game={this.props.game} />
           </section>
         )
@@ -204,7 +224,7 @@ class Game {
     let SquaresList = React.createClass({
       render() {
         const squaresGroups = _.groupBy(this.props.data.squares, square => square.coordinates.y);
-        const game = this.props.game;
+        const { game } = this.props;
         return(
           <div>
             {_.values(squaresGroups).reverse().map(squaresGroup => {
@@ -227,8 +247,7 @@ class Game {
 
     let SquareSide = React.createClass({
       render() {
-        const side = this.props.data.side;
-        const claim = this.props.data.claim;
+        const { side, claim } = this.props.data;
         let claimInformation, claimed = "";
 
         if (claim) {
@@ -259,7 +278,7 @@ class Game {
             return claim.position == side;
           });
         };
-        const game = this.props.game;
+        const { game } = this.props;
 
         let style = {};
 
