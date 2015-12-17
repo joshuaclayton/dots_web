@@ -1,3 +1,6 @@
+const _ = require("underscore");
+window.md5 = require("md5");
+
 class Game {
   constructor(gameId, channel) {
     this.gameId = gameId;
@@ -25,7 +28,9 @@ class Game {
 
       render() {
         if(this._lobbyAvailable()) {
-          if(this._gameStarted()) {
+          if (this._gameCompleted()) {
+            return this._renderScore();
+          } else if(this._gameStarted()) {
             return this._renderFullBoard();
           } else if (self.player) {
             return this._renderPending();
@@ -41,6 +46,10 @@ class Game {
         return this.state && this.state.lobby;
       },
 
+      _gameCompleted() {
+        return this.state.lobby.game.completed;
+      },
+
       _gameStarted() {
         return this.state.lobby.status != "not_started";
       },
@@ -53,12 +62,20 @@ class Game {
         )
       },
 
+      _renderScore() {
+        return(
+          <section className="score">
+            <Score data={this.state.lobby}/>
+          </section>
+        );
+      },
+
       _renderFullBoard() {
         return(
           <section>
             <PlayersList data={this.state.lobby.game.players} />
             <TurnDesignator data={this.state.lobby} />
-            <Board data={this.state.lobby.game.board} />
+            <Board data={this.state.lobby.game.board} game={this.state.lobby.game} />
           </section>
         )
       },
@@ -104,10 +121,7 @@ class Game {
 
       _onSubmit(e) {
         e.preventDefault();
-
-        channel.push("game:start", {
-          game_id: gameId
-        });
+        channel.push("game:start", { game_id: gameId });
       }
     });
 
@@ -121,12 +135,9 @@ class Game {
 
     let Registration = React.createClass({
       render() {
-        let boardSelector;
-
-        if (this.props.data.width) {
+        let boardSelector = "";
+        if (this._boardSizeChosen()) {
           boardSelector = "hidden";
-        } else {
-          boardSelector = "";
         }
 
         return(
@@ -151,29 +162,40 @@ class Game {
           </form>
         )
       },
+
       _onSubmit(e) {
         const playerName = document.getElementById("player_name").value;
         const size = document.getElementById("board_size").options[document.getElementById("board_size").selectedIndex].text.split("x");
 
-        channel.push("game:begin", {
-          game_id: gameId,
-          player: playerName,
-          width: size[0],
-          height: size[1]
-        });
+        let sizeOptions = {width: 0, height: 0};
+        if (!this._boardSizeChosen()) {
+          sizeOptions.width = size[0];
+          sizeOptions.height = size[1];
+        }
+
+        channel.push("game:begin",
+          Object.assign({
+            game_id: gameId,
+            player: playerName
+          }, sizeOptions)
+        );
 
         self.player = playerName;
 
         e.preventDefault();
+      },
+
+      _boardSizeChosen() {
+        return !!this.props.data.width;
       }
     });
 
     let Board = React.createClass({
       render() {
         return(
-          <section>
+          <section className="board">
             <h2>Board ({this.props.data.width}x{this.props.data.height})</h2>
-            <SquaresList data={this.props.data} />
+            <SquaresList data={this.props.data} game={this.props.game} />
           </section>
         )
       }
@@ -181,34 +203,52 @@ class Game {
 
     let SquaresList = React.createClass({
       render() {
+        const squaresGroups = _.groupBy(this.props.data.squares, square => square.coordinates.y);
+        const game = this.props.game;
         return(
           <div>
-            {this.props.data.squares.map(square => {
-              return <Square key={square.key} data={square} />
+            {_.values(squaresGroups).reverse().map(squaresGroup => {
+              return(
+                <div className="square-row">
+                  {squaresGroup.map(square => {
+                    return <Square key={square.key} data={square} game={game} />
+                  })}
+                </div>
+              );
             })}
           </div>
         )
       }
     });
 
+    var color = function(string) {
+      return `#${md5(string).slice(0, 6)}`;
+    };
+
     let SquareSide = React.createClass({
       render() {
         const side = this.props.data.side;
         const claim = this.props.data.claim;
-        let claimInformation;
+        let claimInformation, claimed = "";
+
         if (claim) {
-          claimInformation = ` (taken by ${claim.player})`
+          claimInformation = ` (taken by ${claim.player})`;
+          claimed = "claimed";
         }
-        return <li onClick={this._onClick}>{side}{claimInformation}</li>
+        const cssClass = `side-${side.toLowerCase()} ${claimed}`;
+
+        return <li className={cssClass} onClick={this._onClick}></li>
       },
 
       _onClick() {
-        channel.push("game:claim", {
-          game_id: gameId,
-          x: this.props.data.x,
-          y: this.props.data.y,
-          position: this.props.data.side
-        });
+        if(self.player == this.props.game.current_player_name) {
+          channel.push("game:claim", {
+            game_id: gameId,
+            x: this.props.data.x,
+            y: this.props.data.y,
+            position: this.props.data.side
+          });
+        }
       }
     });
 
@@ -219,25 +259,29 @@ class Game {
             return claim.position == side;
           });
         };
+        const game = this.props.game;
 
+        let style = {};
+
+        if (this.props.data.completed_by) {
+          style = {backgroundColor: color(this.props.data.completed_by)};
+        }
         return(
-          <div>
-            [{this.props.data.coordinates.x}, {this.props.data.coordinates.y}]
-            <ul>
-              {this._sides().map(side => {
-                const data = {
-                  side: side,
-                  claim: claimForSide(side),
-                  x: this.props.data.coordinates.x,
-                  y: this.props.data.coordinates.y
-                };
+          <ul className="square" style={style}>
+            {this._sides().map(side => {
+              const data = {
+                side: side,
+                claim: claimForSide(side),
+                x: this.props.data.coordinates.x,
+                y: this.props.data.coordinates.y
+              };
 
-                return <SquareSide data={data} />
-              })}
-            </ul>
-          </div>
+              return <SquareSide data={data} game={game} />
+            })}
+          </ul>
         )
       },
+
       _sides() {
         return ["Top", "Right", "Bottom", "Left"];
       }
@@ -246,12 +290,36 @@ class Game {
     let PlayersList = React.createClass({
       render() {
         return(
-          <ul>
-            {this.props.data.map(player => {
-              return <Player key={player} data={player} />
-            })}
-          </ul>
+          <section className="players-list">
+            <h2>Players</h2>
+            <ul>
+              {this.props.data.map(player => {
+                return <Player key={player} data={player} />
+              })}
+            </ul>
+          </section>
         )
+      }
+    });
+
+    let Score = React.createClass({
+      render() {
+
+        const controls = _.map(this.props.data.game.score.scores, function(value, key) {
+          return [
+            (<dt>{key}</dt>),
+            (<dd>{value}</dd>)
+          ];
+        });
+
+        return(
+          <section>
+            <h2>Winner: {this.props.data.game.score.winners}</h2>
+            <dl>
+              {controls}
+            </dl>
+          </section>
+        );
       }
     });
 

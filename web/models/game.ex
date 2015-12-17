@@ -13,6 +13,19 @@ defmodule DotsWeb.Game do
     GenServer.call(__MODULE__, {:update, game_id, lobby})
   end
 
+  def configure(game_id, %{player: player, width: width, height: height}) when height > 0 do
+    find(game_id)
+    |> Dots.Lobby.add_player(player)
+    |> Dots.Lobby.choose_dimensions(width, height)
+    |> update(game_id)
+  end
+
+  def configure(game_id, %{player: player, width: width, height: height}) when height == 0 do
+    find(game_id)
+    |> Dots.Lobby.add_player(player)
+    |> update(game_id)
+  end
+
   defp create_game(game_id) do
     GenServer.call(__MODULE__, {:update, game_id, Dots.Lobby.new})
   end

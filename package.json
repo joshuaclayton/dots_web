@@ -6,6 +6,9 @@
     "babel-brunch": "^5.1.1",
     "clean-css-brunch": ">= 1.0 < 1.8",
     "css-brunch": ">= 1.0 < 1.8",
+    "sass-brunch": ">= 1.9 < 2.0",
+    "underscore": ">= 1.8.3 < 2.0",
+    "md5": ">= 2.0.0 < 3.0",
     "javascript-brunch": ">= 1.0 < 1.8",
     "uglify-js-brunch": ">= 1.0 < 1.8"
   }
