@@ -1,9 +1,10 @@
+.loading {
+  text-align: center;
+}
+
 .modal {
-  border: 1px solid #ddd;
-  background: #fff;
+  @extend .drop-shadow;
   width: 40vw;
-  border-radius: 4px;
-  padding: 2vw;
   min-width: 30em;
 
   .title {
@@ -20,7 +21,7 @@
 form {
   li {
     list-style-type: none;
-    margin-bottom: 1em;
+    margin-bottom: 1.5em;
 
     label {
       display: block;
@@ -34,7 +35,31 @@ form {
     }
 
     input[type=submit] {
-      text-align: right;
+      color: $white;
+      font-size: 1.5em;
+      background: $red;
+      padding: .5em;
+      border: none;
+      width: 100%;
+      border-radius: 3px;
+      font-family: $sans-serif-family;
+    }
+  }
+
+  .size-selector {
+    display: flex;
+    justify-content: space-between;
+
+    a {
+      font-family: $sans-serif-family;
+      background: $brighter-blue;
+      color: $white;
+      border-radius: 3px;
+      padding: .5em 1em;
+      font-size: 1.5em;
+      width: calc(33% - 4em);
+      text-align: center;
+      cursor: pointer;
     }
   }
 }

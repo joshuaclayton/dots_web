@@ -1,18 +1,52 @@
+$dark-blue: #2C3E50;
+$red: #E74C3C;
+$light-gray: #ECF0F1;
+$brighter-blue: #3498DB;
+$bright-blue: #2980B9;
+$white: #FFF;
+$serif-family: "Lora", serif;
+$sans-serif-family: "Open Sans Condensed", sans-serif;
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $sans-serif-family;
+}
+
+h2 {
+  font-size: 2em;
+}
+
+.drop-shadow {
+  box-shadow: 0 0 20px darken($dark-blue, 10%);
+  background: $light-gray;
+  border-radius: 4px;
+  padding: 3vh 3vw;
+}
+
 @import "../vendor/normalize";
 @import "layout";
 @import "registration";
+
+body {
+  color: $dark-blue;
+  font-family: $serif-family;
+}
 
 .hidden {
   display: none;
 }
 
-.players-list {
-  width: 20%;
-  display: inline-block;
+.full-board {
+  @extend .drop-shadow;
+
+  width: 85vw;
+  height: 85vh;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .square-row {
-  margin-top: -10px;
   padding: 0;
 }
 
@@ -22,12 +56,14 @@
   }
 
   margin: 0;
-  margin-left: -5px;
+  margin-left: -10px;
+  margin-top: -15px;
   width: 50px;
   height: 50px;
   display: inline-block;
   padding: 0;
   position: relative;
+
   li {
     list-style-type: none;
     margin: 0;
@@ -35,15 +71,15 @@
     position: absolute;
     &:hover, &.claimed {
       cursor: pointer;
-      background: #aaa;
+      background: darken($brighter-blue, 20%);
     }
   }
 }
 
 .side-left, .side-right {
   height: 100%;
-  width: 5px;
-  background: #eee;
+  width: 10px;
+  background: $brighter-blue;
 }
 
 .side-right {
@@ -56,6 +92,6 @@
 
 .side-top, .side-bottom {
   width: 100%;
-  height: 5px;
-  background: #eee;
+  height: 10px;
+  background: $brighter-blue;
 }

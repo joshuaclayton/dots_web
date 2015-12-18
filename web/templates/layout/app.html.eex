@@ -7,15 +7,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Dots</title>
+    <title>Dots and Lines</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:700|Lora:400,400italic,700" rel="stylesheet" type="text/css">
   </head>
 
   <body>
     <div class="container" role="main">
-
       <%= @inner %>
-
     </div>
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
