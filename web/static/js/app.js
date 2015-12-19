@@ -19,8 +19,8 @@ import "../../../deps/phoenix_html/web/static/js/phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 import socket from "./socket"
-import game from "./game"
-window.Game = game;
+import Game from "./components/game"
+window.Game = Game;
 
 let channel = socket.channel("game", {});
 channel.join()
