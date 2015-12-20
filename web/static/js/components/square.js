@@ -16,7 +16,6 @@ export default React.createClass({
       style.backgroundColor = ColorCalculator.calculate(completed_by);
     }
 
-    console.log(this.props.gameId);
     return(
       <ul className="square" style={style}>
         {SIDES.map(side => {

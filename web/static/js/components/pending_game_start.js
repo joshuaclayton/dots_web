@@ -14,9 +14,7 @@ export default React.createClass({
   },
 
   _onSubmit(e) {
-    console.log(this);
     e.preventDefault();
-    console.log(this.props);
     channel.push("game:start", { game_id: this.props.gameId });
   }
 });
