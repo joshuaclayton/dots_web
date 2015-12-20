@@ -220,10 +220,6 @@ class Game {
       }
     });
 
-    var color = function(string) {
-      return `#${md5(string).slice(0, 6)}`;
-    };
-
     let PlayersList = React.createClass({
       render() {
         return(

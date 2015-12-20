@@ -8,8 +8,7 @@ export default React.createClass({
     const squaresGroups = _.groupBy(data.squares, square => square.coordinates.y);
     return(
       <div>
-        {_.values(squaresGroups).reverse().map((squaresGroup, index) => {
-          const lastRow = index == _.values(squaresGroups).length;
+        {_.values(squaresGroups).reverse().map(squaresGroup => {
           return (
             <SquaresRow data={{ squares: squaresGroup }} game={game} gameId={gameId} ownerName={ownerName}/>
           );
