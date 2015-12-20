@@ -16,7 +16,7 @@ defmodule DotsWeb.Router do
   scope "/", DotsWeb do
     pipe_through :browser # Use the default browser stack
 
-    get "/", PageController, :index
+    get "/", GameController, :random
     resources "/games", GameController, only: [:show]
   end
 
