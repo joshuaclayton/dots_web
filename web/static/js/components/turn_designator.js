@@ -4,7 +4,7 @@ import Notifier from "../notifier";
 export default React.createClass({
   render() {
     if (this._currentPlayersTurn() && document.hidden) {
-      Notifier.notify("Dots and Lines", "It's your turn!");
+      Notifier.notify("Dots and Boxes", "It's your turn!");
     }
 
     return(
