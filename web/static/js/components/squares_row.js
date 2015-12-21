@@ -1,7 +1,7 @@
 import React from "react";
 import Square from "./square";
 
-export default React.createClass({
+export default class SquaresRow extends React.Component {
   render() {
     const { squares } = this.props.data;
     const { game, gameId, ownerName } = this.props;
@@ -14,4 +14,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+};

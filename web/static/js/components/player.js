@@ -1,9 +1,7 @@
 import React from "react";
 
-export default React.createClass({
-  render() {
-    return(
-      <li>{this.props.data}</li>
-    )
-  }
-});
+export default (props) => {
+  return(
+    <li>{props.data}</li>
+  );
+};

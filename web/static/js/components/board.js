@@ -1,7 +1,7 @@
 import React from "react";
 import SquaresList from "./squares_list";
 
-export default React.createClass({
+export default class Board extends React.Component {
   render() {
     const { data, game, gameId, ownerName } = this.props;
     return(
@@ -10,4 +10,4 @@ export default React.createClass({
       </section>
     )
   }
-});
+};

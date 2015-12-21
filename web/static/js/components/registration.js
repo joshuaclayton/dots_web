@@ -6,7 +6,7 @@ boardSizes[2] = "2x2";
 boardSizes[5] = "5x5";
 boardSizes[10] = "10x10";
 
-export default React.createClass({
+export default class Registration extends React.Component {
   render() {
     let boardSelector = "";
     if (this._boardSizeChosen()) {
@@ -16,17 +16,17 @@ export default React.createClass({
     return(
       <section className="registration modal">
         <h2 className="title">Let's get started!</h2>
-        <form onSubmit={this._onSubmit}>
+        <form onSubmit={this._onSubmit.bind(this)}>
           <ul>
             <li>
               <label htmlFor="player_name">First, what's your name?</label>
-              <input id="player_name" type="text" onChange={this._chooseName}/>
+              <input id="player_name" type="text" onChange={this._chooseName.bind(this)}/>
             </li>
             <li className={boardSelector}>
               <label htmlFor="board_size">Next, what board size do you prefer?</label>
               <section className="size-selector">
                 {_.values(boardSizes).map(boardSize => {
-                  return <a onClick={this._chooseSize} key={boardSize} data-size={boardSize}>{boardSize}</a>
+                  return <a onClick={this._chooseSize.bind(this)} key={boardSize} data-size={boardSize}>{boardSize}</a>
                 })}
               </section>
             </li>
@@ -37,25 +37,25 @@ export default React.createClass({
         </form>
       </section>
     )
-  },
+  }
 
   _chooseSize(e) {
     e.preventDefault();
     const chosenSize = e.target.getAttribute("data-size")
     this.setState({chosenSize: chosenSize});
-  },
+  }
 
   _chooseName(e) {
     this.setState({playerName: e.target.value});
-  },
+  }
 
   _formComplete() {
     return (this._boardSizeSelected() || this._boardSizeChosen()) && this.state && this.state.playerName;
-  },
+  }
 
   _boardSizeSelected() {
     return this.state && this.state.chosenSize;
-  },
+  }
 
   _onSubmit(e) {
     e.preventDefault();
@@ -77,9 +77,9 @@ export default React.createClass({
     );
 
     this.props.onNameAssignment(playerName);
-  },
+  }
 
   _boardSizeChosen() {
     return !!this.props.data.width;
   }
-});
+};

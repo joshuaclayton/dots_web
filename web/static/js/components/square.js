@@ -4,7 +4,7 @@ import ColorCalculator from "../color_calculator";
 
 const SIDES = ["Top", "Right", "Bottom", "Left"];
 
-export default React.createClass({
+export default class Square extends React.Component {
   render() {
     const { game } = this.props;
     const { completed_by } = this.props.data;
@@ -30,11 +30,11 @@ export default React.createClass({
         })}
       </ul>
     )
-  },
+  }
 
   _claimForSide(side) {
     return this.props.data.claims.find(claim => {
       return claim.position == side;
     });
   }
-});
+};

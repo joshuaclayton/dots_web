@@ -1,7 +1,7 @@
 import React from "react";
 import * as _ from "underscore";
 
-export default React.createClass({
+export default class Score extends React.Component {
   render() {
     const { scores, winners } = this.props.data.game.score;
     const controls = _.map(scores, function(value, key) {
@@ -20,4 +20,4 @@ export default React.createClass({
       </section>
     );
   }
-});
+};

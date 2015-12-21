@@ -2,7 +2,7 @@ import * as _ from "underscore";
 import React from "react";
 import SquaresRow from "./squares_row";
 
-export default React.createClass({
+export default class SquaresList extends React.Component {
   render() {
     const { data, game, gameId, ownerName } = this.props;
     const squaresGroups = _.groupBy(data.squares, square => square.coordinates.y);
@@ -16,4 +16,4 @@ export default React.createClass({
       </div>
     )
   }
-});
+};

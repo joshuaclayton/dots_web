@@ -1,6 +1,6 @@
 import React from "react";
 
-export default React.createClass({
+export default class SquareSide extends React.Component {
   render() {
     const { side, claim } = this.props.data;
     let claimInformation, claimed = "";
@@ -11,8 +11,8 @@ export default React.createClass({
     }
     const cssClass = `side-${side.toLowerCase()} ${claimed}`;
 
-    return <li className={cssClass} onClick={this._onClick}></li>
-  },
+    return <li className={cssClass} onClick={this._onClick.bind(this)}></li>
+  }
 
   _onClick() {
     const { x, y, side } = this.props.data;
@@ -25,4 +25,4 @@ export default React.createClass({
       });
     }
   }
-});
+};
