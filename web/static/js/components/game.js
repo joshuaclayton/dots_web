@@ -3,7 +3,8 @@ import React from "react";
 import { render } from "react-dom";
 import TurnDesignator from "./turn_designator";
 import PendingGameStart from "./pending_game_start";
-import Player from "./player";
+import PlayersList from "./players_list";
+import Registration from "./registration";
 import Board from "./board";
 import Score from "./score";
 
@@ -92,7 +93,7 @@ class Game {
 
       _renderRegistration() {
         return(
-          <Registration data={this.state.lobby}/>
+          <Registration data={this.state.lobby} gameId={gameId} onNameAssignment={this._onNameAssignment}/>
         )
       },
 
@@ -131,107 +132,10 @@ class Game {
             <h2>Loading game...</h2>
           </section>
         )
-      }
-    });
-
-    let Registration = React.createClass({
-      _boardSizes() {
-        const boardSizes = {};
-        boardSizes[2] = "2x2";
-        boardSizes[5] = "5x5";
-        boardSizes[10] = "10x10";
-        return boardSizes;
       },
 
-      render() {
-        let boardSelector = "";
-        if (this._boardSizeChosen()) {
-          boardSelector = "hidden";
-        }
-
-        return(
-          <section className="registration modal">
-            <h2 className="title">Let's get started!</h2>
-            <form onSubmit={this._onSubmit}>
-              <ul>
-                <li>
-                  <label htmlFor="player_name">First, what's your name?</label>
-                  <input id="player_name" type="text" onChange={this._chooseName}/>
-                </li>
-                <li className={boardSelector}>
-                  <label htmlFor="board_size">Next, what board size do you prefer?</label>
-                  <section className="size-selector">
-                    {_.values(this._boardSizes()).map(boardSize => {
-                      return <a onClick={this._chooseSize} data-size={boardSize}>{boardSize}</a>
-                    })}
-                  </section>
-                </li>
-                <li>
-                  <input type="submit" value="Game on!" disabled={!this._formComplete()}/>
-                </li>
-              </ul>
-            </form>
-          </section>
-        )
-      },
-
-      _chooseSize(e) {
-        const chosenSize = e.target.getAttribute("data-size")
-        this.setState({chosenSize: chosenSize});
-        e.preventDefault();
-      },
-
-      _chooseName(e) {
-        this.setState({playerName: e.target.value});
-      },
-
-      _formComplete() {
-        return (this._boardSizeSelected() || this._boardSizeChosen()) && this.state && this.state.playerName;
-      },
-
-      _boardSizeSelected() {
-        return this.state && this.state.chosenSize;
-      },
-
-      _onSubmit(e) {
-        e.preventDefault();
-
-        const playerName = this.state.playerName;
-
-        let sizeOptions = {width: 0, height: 0};
-        if (!this._boardSizeChosen()) {
-          const size = this.state.chosenSize.split("x");
-          sizeOptions.width = size[0];
-          sizeOptions.height = size[1];
-        }
-
-        channel.push("game:begin",
-          Object.assign({
-            game_id: gameId,
-            player: playerName
-          }, sizeOptions)
-        );
-
+      _onNameAssignment(playerName) {
         self.playerName = playerName;
-      },
-
-      _boardSizeChosen() {
-        return !!this.props.data.width;
-      }
-    });
-
-    let PlayersList = React.createClass({
-      render() {
-        return(
-          <section className="players-list">
-            <h2>Players</h2>
-            <ul>
-              {this.props.data.map(player => {
-                return <Player key={player} data={player} />
-              })}
-            </ul>
-          </section>
-        )
       }
     });
 
