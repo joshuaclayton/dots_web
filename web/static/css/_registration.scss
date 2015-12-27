@@ -43,6 +43,11 @@ form {
       width: 100%;
       border-radius: 3px;
       font-family: $sans-serif-family;
+
+      &[disabled] {
+        background: desaturate($red, 40%);
+        color: $light-gray;
+      }
     }
   }
 
