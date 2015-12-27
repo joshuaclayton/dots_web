@@ -4,12 +4,12 @@ import Square from "./square";
 export default class SquaresRow extends React.Component {
   render() {
     const { squares } = this.props.data;
-    const { game, gameId, ownerName } = this.props;
+    const { game, gameId, owner } = this.props;
 
     return(
       <div className="square-row">
         {squares.map(square => {
-          return <Square key={square.key} data={square} game={game} gameId={gameId} ownerName={ownerName} />
+          return <Square key={square.key} data={square} game={game} gameId={gameId} owner={owner} />
         })}
       </div>
     );

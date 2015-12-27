@@ -111,7 +111,7 @@ class Game {
           <section className="full-board">
             <PlayersList data={lobby.game.players} />
             <TurnDesignator data={lobby} player={self.playerName} />
-            <Board data={lobby.game.board} game={lobby.game} gameId={gameId} ownerName={self.playerName} />
+            <Board data={lobby.game.board} game={lobby.game} gameId={gameId} owner={self.playerName} />
           </section>
         )
       },

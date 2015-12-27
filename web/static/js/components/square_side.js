@@ -16,7 +16,7 @@ export default class SquareSide extends React.Component {
 
   _onClick() {
     const { x, y, side } = this.props.data;
-    if(this.props.ownerName == this.props.game.current_player_name) {
+    if(this.props.owner == this.props.game.current_player_name) {
       channel.push("game:claim", {
         game_id: this.props.gameId,
         x: x,

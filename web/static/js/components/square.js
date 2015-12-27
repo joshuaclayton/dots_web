@@ -26,7 +26,7 @@ export default class Square extends React.Component {
             y: y
           };
 
-          return <SquareSide data={data} game={game} gameId={this.props.gameId} ownerName={this.props.ownerName} />
+          return <SquareSide data={data} game={game} gameId={this.props.gameId} owner={this.props.owner} />
         })}
       </ul>
     )
