@@ -6,35 +6,39 @@ const SIDES = ["Top", "Right", "Bottom", "Left"];
 
 export default class Square extends React.Component {
   render() {
-    const { game } = this.props;
-    const { completed_by } = this.props.data;
-    const { x, y } = this.props.data.coordinates;
-
-    const style = {};
-
-    if (completed_by) {
-      style.backgroundColor = ColorCalculator.calculate(completed_by);
-    }
+    const { game, gameId, owner, data } = this.props;
+    const { x, y } = data.coordinates;
 
     return(
-      <ul className="square" style={style}>
+      <ul className="square" style={this._squareStyle}>
         {SIDES.map(side => {
-          const data = {
+          const squareSideData = {
             side: side,
             claim: this._claimForSide(side),
             x: x,
             y: y
           };
 
-          return <SquareSide data={data} game={game} gameId={this.props.gameId} owner={this.props.owner} />
+          return <SquareSide data={squareSideData} game={game} gameId={gameId} owner={owner} />
         })}
       </ul>
-    )
+    );
   }
 
   _claimForSide(side) {
-    return this.props.data.claims.find(claim => {
+    const { claims } = this.props.data;
+    return claims.find(claim => {
       return claim.position == side;
     });
+  }
+
+  get _squareStyle() {
+    const { completed_by } = this.props.data;
+
+    if (completed_by) {
+      return { backgroundColor: ColorCalculator.calculate(completed_by) };
+    } else {
+      return {};
+    }
   }
 };

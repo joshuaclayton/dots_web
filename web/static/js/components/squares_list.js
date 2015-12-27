@@ -4,16 +4,20 @@ import SquaresRow from "./squares_row";
 
 export default class SquaresList extends React.Component {
   render() {
-    const { data, game, gameId, owner } = this.props;
-    const squaresGroups = _.groupBy(data.squares, square => square.coordinates.y);
+    const { game, gameId, owner } = this.props;
     return(
       <div>
-        {_.values(squaresGroups).reverse().map(squaresGroup => {
+        {this._squaresGroups.map(squaresGroup => {
           return (
             <SquaresRow data={{ squares: squaresGroup }} game={game} gameId={gameId} owner={owner}/>
           );
         })}
       </div>
     )
+  }
+
+  get _squaresGroups() {
+    const { squares } = this.props.data;
+    return _.values(_.groupBy(squares, square => square.coordinates.y)).reverse();
   }
 };

@@ -15,6 +15,7 @@ export default class PendingGameStart extends React.Component {
 
   _onSubmit(e) {
     e.preventDefault();
-    channel.push("game:start", { game_id: this.props.gameId });
+    const { gameId } = this.props;
+    channel.push("game:start", { game_id: gameId });
   }
 };

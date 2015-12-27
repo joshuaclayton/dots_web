@@ -3,7 +3,7 @@ import * as _ from "underscore";
 
 export default class Score extends React.Component {
   render() {
-    const { scores, winners } = this.props.data.game.score;
+    const { scores } = this.props.data.game.score;
     const controls = _.map(scores, function(value, key) {
       return [
         (<dt>{key}</dt>),
@@ -13,11 +13,15 @@ export default class Score extends React.Component {
 
     return(
       <section className="modal">
-        <h2>Winner: {winners}</h2>
+        <h2>Winner: {this._winners}</h2>
         <dl>
           {controls}
         </dl>
       </section>
     );
+  }
+
+  get _winners() {
+    return this.props.data.game.score.winners;
   }
 };
