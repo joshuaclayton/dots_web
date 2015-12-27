@@ -51,8 +51,8 @@ class Game {
     const self = this;
 
     window.onbeforeunload = function() {
-      if(self.playerName) {
-        channel.push("player:leave", {game_id: gameId, player: self.playerName});
+      if(self.player) {
+        channel.push("player:leave", {game_id: gameId, player: self.player});
       }
     };
 
@@ -69,7 +69,7 @@ class Game {
             return this._renderScore();
           } else if(this._gameStarted()) {
             return this._renderFullBoard();
-          } else if (self.playerName) {
+          } else if (self.player) {
             return this._renderPending();
           } else {
             return this._renderRegistration();
@@ -110,8 +110,8 @@ class Game {
         return(
           <section className="full-board">
             <PlayersList data={lobby.game.players} />
-            <TurnDesignator data={lobby} player={self.playerName} />
-            <Board data={lobby.game.board} game={lobby.game} gameId={gameId} owner={self.playerName} />
+            <TurnDesignator data={lobby} player={self.player} />
+            <Board data={lobby.game.board} game={lobby.game} gameId={gameId} owner={self.player} />
           </section>
         )
       },
@@ -135,7 +135,7 @@ class Game {
       },
 
       _onNameAssignment(playerName) {
-        self.playerName = playerName;
+        self.player = playerName;
       }
     });
 
