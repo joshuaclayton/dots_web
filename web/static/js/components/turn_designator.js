@@ -6,20 +6,20 @@ export default class TurnDesignator extends React.Component {
     this._notifyCurrentPlayer();
 
     return(
-      <p>It's {this._currentPlayer}'s turn</p>
+      <p>It's {this._currentPlayer.name}'s turn</p>
     );
   }
 
   get _currentPlayersTurn() {
-    return this._currentPlayer == this._thisPlayer;
+    return this._currentPlayer.name == this._thisPlayer.name;
   }
 
   get _currentPlayer() {
-    return this.props.data.game.current_player.name;
+    return this.props.data.game.current_player;
   }
 
   get _thisPlayer() {
-    return this.props.player;
+    return this.props.player || {};
   }
 
   _notifyCurrentPlayer() {

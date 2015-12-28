@@ -52,7 +52,7 @@ class Game {
 
     window.onbeforeunload = function() {
       if(self.player) {
-        channel.push("player:leave", { game_id: gameId, player: self.player });
+        channel.push("player:leave", { game_id: gameId, player: self.player.name });
       }
     };
 
@@ -135,7 +135,7 @@ class Game {
       },
 
       _onNameAssignment(playerName) {
-        self.player = playerName;
+        self.player = { name: playerName };
       }
     });
 
