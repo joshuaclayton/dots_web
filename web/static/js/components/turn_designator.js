@@ -15,7 +15,7 @@ export default class TurnDesignator extends React.Component {
   }
 
   get _currentPlayer() {
-    return this.props.data.game.current_player_name;
+    return this.props.data.game.current_player.name;
   }
 
   get _thisPlayer() {

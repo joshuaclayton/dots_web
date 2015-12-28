@@ -23,7 +23,7 @@ export default class SquareSide extends React.Component {
 
   get _ownerIsCurrentPlayer() {
     const { game, owner } = this.props;
-    return owner == game.current_player_name;
+    return owner == game.current_player.name;
   }
 
   get _claimedClass() {
