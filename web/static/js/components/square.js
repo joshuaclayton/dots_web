@@ -36,7 +36,7 @@ export default class Square extends React.Component {
     const { completed_by } = this.props.data;
 
     if (completed_by) {
-      return { backgroundColor: ColorCalculator.calculate(completed_by) };
+      return { backgroundColor: ColorCalculator.calculate(completed_by.id) };
     } else {
       return {};
     }
