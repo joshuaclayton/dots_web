@@ -1,4 +1,3 @@
-import * as _ from "underscore";
 import React from "react";
 import { render } from "react-dom";
 import TurnDesignator from "./turn_designator";

@@ -1,5 +1,4 @@
 import React from "react";
-import * as _ from "underscore";
 
 export default class Score extends React.Component {
   render() {
