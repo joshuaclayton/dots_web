@@ -7,6 +7,7 @@ import PlayersList from "./players_list";
 import Registration from "./registration";
 import Board from "./board";
 import Score from "./score";
+import Guid from "../guid";
 
 // +--+---------------------------+--+---------------------------+--+---------------------------+--+
 // |  |                           |  |                           |  |                           |  |
@@ -52,7 +53,7 @@ class Game {
 
     window.onbeforeunload = function() {
       if(self.player) {
-        channel.push("player:leave", { game_id: gameId, player: self.player.name });
+        channel.push("player:leave", { game_id: gameId, player: self.player.id });
       }
     };
 
@@ -68,6 +69,7 @@ class Game {
           if (this._gameCompleted()) {
             return this._renderScore();
           } else if(this._gameStarted()) {
+            this._lookUpPlayerByGuid();
             return this._renderFullBoard();
           } else if (self.player) {
             return this._renderPending();
@@ -134,9 +136,43 @@ class Game {
         )
       },
 
-      _onNameAssignment(playerName) {
-        self.player = { name: playerName };
+      _onNameAssignment(options) {
+        const { playerName, gameId, size } = options;
+
+        self.player = { name: playerName, id: this._findOrGenerateGuid() };
+
+        channel.push("game:begin",
+          Object.assign({
+            game_id: gameId,
+            player: self.player
+          }, size)
+        );
+      },
+
+      _lookUpPlayerByGuid() {
+        const guid = localStorage.getItem("playerGuid");
+        const { players } = this.state.lobby.game;
+
+        if (!self.player && guid && players.find(player => player.id === guid)) {
+          self.player = {
+            id: guid,
+            name: players.find(player => player.id == guid).name
+          };
+
+          channel.push("player:rejoin", { game_id: gameId, player: self.player.id });
+        }
+      },
+
+      _findOrGenerateGuid() {
+        if(localStorage.getItem("playerGuid")) {
+          return localStorage.getItem("playerGuid");
+        } else {
+          const guid = Guid.generate();
+          localStorage.setItem("playerGuid", guid);
+          return guid;
+        }
       }
+
     });
 
     render(<DotsGame />, document.getElementById("game"))

@@ -52,14 +52,11 @@ export default class Registration extends React.Component {
 
     const playerName = this.state.playerName;
 
-    channel.push("game:begin",
-      Object.assign({
-        game_id: this.props.gameId,
-        player: playerName
-      }, this._chosenSize)
-    );
-
-    this.props.onNameAssignment(playerName);
+    this.props.onNameAssignment({
+      playerName: playerName,
+      gameId: this.props.gameId,
+      size: this._chosenSize
+    });
   }
 
   get _boardSizeChosen() {

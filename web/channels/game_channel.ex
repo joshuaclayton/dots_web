@@ -46,6 +46,17 @@ defmodule DotsWeb.Channels.GameChannel do
     {:noreply, socket}
   end
 
+  def handle_in("player:rejoin", %{"game_id" => id, "player" => player}, socket) do
+    game_id = id |> to_string |> String.to_integer
+
+    DotsWeb.Game.find(game_id)
+    |> Dots.Lobby.rejoin_player(player)
+    |> DotsWeb.Game.update(game_id)
+
+    broadcast_game_update(socket, game_id)
+    {:noreply, socket}
+  end
+
   def join(_topic, _params, socket) do
     {:ok, socket}
   end

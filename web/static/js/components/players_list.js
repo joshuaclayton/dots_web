@@ -9,7 +9,7 @@ export default (props) => {
       <h2>Players</h2>
       <ul>
         {players.map(player => {
-          return <Player key={player} data={player} />
+          return <Player key={player.id} data={player} />
         })}
       </ul>
     </section>
