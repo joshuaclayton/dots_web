@@ -1,7 +1,7 @@
 module DotsAndBoxes where
 
 import DotsAndBoxes.Model exposing (nullLobby, Lobby, Game)
-import DotsAndBoxes.View exposing (loadingView)
+import DotsAndBoxes.View exposing (loadingView, pendingImplementationView, registrationView)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Json.Encode as Json
@@ -26,16 +26,8 @@ view : Lobby -> Html
 view lobby =
   case lobby.status of
     DotsAndBoxes.Model.Unknown -> loadingView
-    _ ->
-      let statusText =
-        case lobby.status of
-          DotsAndBoxes.Model.NotStarted -> "Not started"
-          DotsAndBoxes.Model.Started -> "Started"
-          _ -> ""
-      in
-
-      section [class "modal"]
-        [text statusText]
+    DotsAndBoxes.Model.NotStarted -> registrationView
+    _ -> pendingImplementationView
 
 gameState : Signal Game
 gameState = Signal.foldp update initialGame setGameId

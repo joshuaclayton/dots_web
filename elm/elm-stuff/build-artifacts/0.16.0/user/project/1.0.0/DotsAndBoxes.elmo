@@ -10,7 +10,6 @@ Elm.DotsAndBoxes.make = function (_elm) {
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $DotsAndBoxes$View = Elm.DotsAndBoxes.View.make(_elm),
    $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Json$Decode = Elm.Json.Decode.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
@@ -26,18 +25,10 @@ Elm.DotsAndBoxes.make = function (_elm) {
    });
    var view = function (lobby) {
       var _p0 = lobby.status;
-      if (_p0.ctor === "Unknown") {
-            return $DotsAndBoxes$View.loadingView;
-         } else {
-            var statusText = function () {
-               var _p1 = lobby.status;
-               switch (_p1.ctor)
-               {case "NotStarted": return "Not started";
-                  case "Started": return "Started";
-                  default: return "";}
-            }();
-            return A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text(statusText)]));
-         }
+      switch (_p0.ctor)
+      {case "Unknown": return $DotsAndBoxes$View.loadingView;
+         case "NotStarted": return $DotsAndBoxes$View.registrationView;
+         default: return $DotsAndBoxes$View.pendingImplementationView;}
    };
    var updateLobby = F2(function (payload,oldLobby) {
       var newLobby = A2($Json$Decode.decodeValue,$DotsAndBoxes$Decode.lobbyDecoder,payload);
@@ -45,7 +36,7 @@ Elm.DotsAndBoxes.make = function (_elm) {
    });
    var lobbyState = A3($Signal.foldp,updateLobby,$DotsAndBoxes$Model.nullLobby,setState);
    var main = A2($Signal.map,view,lobbyState);
-   var update = F2(function (gameId,_p2) {    return {id: gameId};});
+   var update = F2(function (gameId,_p1) {    return {id: gameId};});
    var initialGame = {id: 1};
    var gameState = A3($Signal.foldp,update,initialGame,setGameId);
    return _elm.DotsAndBoxes.values = {_op: _op
