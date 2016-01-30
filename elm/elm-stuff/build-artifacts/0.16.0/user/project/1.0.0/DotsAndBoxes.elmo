@@ -23,28 +23,11 @@ Elm.DotsAndBoxes.make = function (_elm) {
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
-   var view = function (lobby) {
-      var _p0 = lobby.status;
-      switch (_p0.ctor)
-      {case "Unknown": return $DotsAndBoxes$View.loadingView;
-         case "NotStarted": return $DotsAndBoxes$View.registrationView;
-         default: return $DotsAndBoxes$View.pendingImplementationView;}
-   };
    var updateLobby = F2(function (payload,oldLobby) {
       var newLobby = A2($Json$Decode.decodeValue,$DotsAndBoxes$Decode.lobbyDecoder,payload);
       return A2($Result.withDefault,oldLobby,newLobby);
    });
    var lobbyState = A3($Signal.foldp,updateLobby,$DotsAndBoxes$Model.nullLobby,setState);
-   var main = A2($Signal.map,view,lobbyState);
-   var update = F2(function (gameId,_p1) {    return {id: gameId};});
-   var initialGame = {id: 1};
-   var gameState = A3($Signal.foldp,update,initialGame,setGameId);
-   return _elm.DotsAndBoxes.values = {_op: _op
-                                     ,initialGame: initialGame
-                                     ,update: update
-                                     ,updateLobby: updateLobby
-                                     ,view: view
-                                     ,gameState: gameState
-                                     ,lobbyState: lobbyState
-                                     ,main: main};
+   var main = A2($Signal.map,$DotsAndBoxes$View.mainView,lobbyState);
+   return _elm.DotsAndBoxes.values = {_op: _op,updateLobby: updateLobby,lobbyState: lobbyState,main: main};
 };

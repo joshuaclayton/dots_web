@@ -8,6 +8,7 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
@@ -34,7 +35,15 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
                    _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Game on!")]),_U.list([]))]))]))]))]));
    var pendingImplementationView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Not yet implemented")]));
    var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading game...")]));
+   var mainView = function (lobby) {
+      var _p0 = lobby.status;
+      switch (_p0.ctor)
+      {case "Unknown": return loadingView;
+         case "NotStarted": return registrationView;
+         default: return pendingImplementationView;}
+   };
    return _elm.DotsAndBoxes.View.values = {_op: _op
+                                          ,mainView: mainView
                                           ,loadingView: loadingView
                                           ,pendingImplementationView: pendingImplementationView
                                           ,registrationView: registrationView};

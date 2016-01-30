@@ -2,6 +2,14 @@ module DotsAndBoxes.View where
 
 import Html exposing (..)
 import Html.Attributes exposing (class, for, type', value, id)
+import DotsAndBoxes.Model exposing (Lobby)
+
+mainView : Lobby -> Html
+mainView lobby =
+  case lobby.status of
+    DotsAndBoxes.Model.Unknown -> loadingView
+    DotsAndBoxes.Model.NotStarted -> registrationView
+    _ -> pendingImplementationView
 
 loadingView : Html
 loadingView =
