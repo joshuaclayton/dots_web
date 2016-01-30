@@ -1,0 +1,23 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.Model = Elm.DotsAndBoxes.Model || {};
+Elm.DotsAndBoxes.Model.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.Model = _elm.DotsAndBoxes.Model || {};
+   if (_elm.DotsAndBoxes.Model.values) return _elm.DotsAndBoxes.Model.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var Game = function (a) {    return {id: a};};
+   var Lobby = F3(function (a,b,c) {    return {width: a,height: b,status: c};});
+   var Started = {ctor: "Started"};
+   var NotStarted = {ctor: "NotStarted"};
+   var Unknown = {ctor: "Unknown"};
+   var nullLobby = {width: 0,height: 0,status: Unknown};
+   return _elm.DotsAndBoxes.Model.values = {_op: _op,Unknown: Unknown,NotStarted: NotStarted,Started: Started,Lobby: Lobby,Game: Game,nullLobby: nullLobby};
+};

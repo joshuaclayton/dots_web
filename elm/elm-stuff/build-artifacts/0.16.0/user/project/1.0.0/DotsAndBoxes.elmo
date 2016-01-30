@@ -1,0 +1,59 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   if (_elm.DotsAndBoxes.values) return _elm.DotsAndBoxes.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Decode = Elm.DotsAndBoxes.Decode.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $DotsAndBoxes$View = Elm.DotsAndBoxes.View.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Json$Encode = Elm.Json.Encode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var setState = Elm.Native.Port.make(_elm).inboundSignal("setState","Json.Encode.Value",function (v) {    return v;});
+   var setGameId = Elm.Native.Port.make(_elm).inboundSignal("setGameId",
+   "Int",
+   function (v) {
+      return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
+   });
+   var view = function (lobby) {
+      var _p0 = lobby.status;
+      if (_p0.ctor === "Unknown") {
+            return $DotsAndBoxes$View.loadingView;
+         } else {
+            var statusText = function () {
+               var _p1 = lobby.status;
+               switch (_p1.ctor)
+               {case "NotStarted": return "Not started";
+                  case "Started": return "Started";
+                  default: return "";}
+            }();
+            return A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text(statusText)]));
+         }
+   };
+   var updateLobby = F2(function (payload,oldLobby) {
+      var newLobby = A2($Json$Decode.decodeValue,$DotsAndBoxes$Decode.lobbyDecoder,payload);
+      return A2($Result.withDefault,oldLobby,newLobby);
+   });
+   var lobbyState = A3($Signal.foldp,updateLobby,$DotsAndBoxes$Model.nullLobby,setState);
+   var main = A2($Signal.map,view,lobbyState);
+   var update = F2(function (gameId,_p2) {    return {id: gameId};});
+   var initialGame = {id: 1};
+   var gameState = A3($Signal.foldp,update,initialGame,setGameId);
+   return _elm.DotsAndBoxes.values = {_op: _op
+                                     ,initialGame: initialGame
+                                     ,update: update
+                                     ,updateLobby: updateLobby
+                                     ,view: view
+                                     ,gameState: gameState
+                                     ,lobbyState: lobbyState
+                                     ,main: main};
+};

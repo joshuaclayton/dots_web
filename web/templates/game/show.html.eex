@@ -1,8 +1,16 @@
 <div id="game"></div>
+<div id="game-elm"></div>
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
     var game = new Game(<%= @game_id %>, window.channel);
     game.register();
+
+    var game = Elm.embed(Elm.DotsAndBoxes, document.getElementById('game-elm'), { setGameId: 0, setState: {} });
+    game.ports.setGameId.send(<%= @game_id %>);
+
+    window.channel.on("game:update:<%= @game_id %>", function(payload) {
+      game.ports.setState.send(payload.lobby);
+    });
   });
 </script>

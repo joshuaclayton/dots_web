@@ -1,0 +1,33 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.Decode = Elm.DotsAndBoxes.Decode || {};
+Elm.DotsAndBoxes.Decode.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.Decode = _elm.DotsAndBoxes.Decode || {};
+   if (_elm.DotsAndBoxes.Decode.values) return _elm.DotsAndBoxes.Decode.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Json$Decode$Extra = Elm.Json.Decode.Extra.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var lobbyStatus = function (status) {
+      var _p0 = status;
+      switch (_p0)
+      {case "not_started": return $DotsAndBoxes$Model.NotStarted;
+         case "started": return $DotsAndBoxes$Model.Started;
+         default: return $DotsAndBoxes$Model.Unknown;}
+   };
+   var decodeStatus = function (status) {    return $Json$Decode.succeed(lobbyStatus(status));};
+   var lobbyDecoder = A2($Json$Decode$Extra.apply,
+   A2($Json$Decode$Extra.apply,
+   A2($Json$Decode.map,$DotsAndBoxes$Model.Lobby,A2($Json$Decode._op[":="],"width",$Json$Decode.$int)),
+   A2($Json$Decode._op[":="],"height",$Json$Decode.$int)),
+   A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"status",$Json$Decode.string),decodeStatus));
+   return _elm.DotsAndBoxes.Decode.values = {_op: _op,lobbyStatus: lobbyStatus,decodeStatus: decodeStatus,lobbyDecoder: lobbyDecoder};
+};

@@ -1,0 +1,20 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.View = Elm.DotsAndBoxes.View || {};
+Elm.DotsAndBoxes.View.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.View = _elm.DotsAndBoxes.View || {};
+   if (_elm.DotsAndBoxes.View.values) return _elm.DotsAndBoxes.View.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading game...")]));
+   return _elm.DotsAndBoxes.View.values = {_op: _op,loadingView: loadingView};
+};
