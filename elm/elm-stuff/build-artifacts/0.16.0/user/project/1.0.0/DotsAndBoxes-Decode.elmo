@@ -24,9 +24,9 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
          default: return $DotsAndBoxes$Model.Unknown;}
    };
    var decodeStatus = function (status) {    return $Json$Decode.succeed(lobbyStatus(status));};
-   var lobbyDecoder = A2($Json$Decode$Extra.apply,
-   A2($Json$Decode$Extra.apply,
-   A2($Json$Decode.map,$DotsAndBoxes$Model.Lobby,A2($Json$Decode._op[":="],"width",$Json$Decode.$int)),
+   var lobbyDecoder = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Lobby),A2($Json$Decode._op[":="],"width",$Json$Decode.$int)),
    A2($Json$Decode._op[":="],"height",$Json$Decode.$int)),
    A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"status",$Json$Decode.string),decodeStatus));
    return _elm.DotsAndBoxes.Decode.values = {_op: _op,lobbyStatus: lobbyStatus,decodeStatus: decodeStatus,lobbyDecoder: lobbyDecoder};

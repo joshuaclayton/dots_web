@@ -1,7 +1,7 @@
 module DotsAndBoxes.Decode where
 
-import Json.Decode exposing (Decoder, succeed, andThen, map, int, string, (:=))
-import Json.Decode.Extra exposing (apply)
+import Json.Decode exposing (Decoder, succeed, andThen, int, string, (:=))
+import Json.Decode.Extra exposing ((|:))
 import DotsAndBoxes.Model exposing (Lobby, GameStatus)
 
 lobbyStatus : String -> GameStatus
@@ -16,7 +16,8 @@ decodeStatus status =
   succeed(lobbyStatus status)
 
 lobbyDecoder : Decoder Lobby
-lobbyDecoder = Lobby
-  `map` ("width" := int)
-  `apply` ("height" := int)
-  `apply` (("status" := string) `andThen` decodeStatus)
+lobbyDecoder =
+  succeed Lobby
+    |: ("width" := int)
+    |: ("height" := int)
+    |: (("status" := string) `andThen` decodeStatus)
