@@ -8,40 +8,59 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Action = Elm.DotsAndBoxes.Action.make(_elm),
+   $DotsAndBoxes$CustomEvent = Elm.DotsAndBoxes.CustomEvent.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var registrationView = A2($Html.section,
-   _U.list([$Html$Attributes.$class("registration modal")]),
-   _U.list([A2($Html.h2,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("Let\'s get started!")]))
-           ,A2($Html.form,
-           _U.list([]),
-           _U.list([A2($Html.ul,
-           _U.list([]),
-           _U.list([A2($Html.li,
-                   _U.list([]),
-                   _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("player_name")]),_U.list([$Html.text("First, what\'s your name?")]))
-                           ,A2($Html.input,_U.list([$Html$Attributes.type$("text"),$Html$Attributes.id("player_name")]),_U.list([]))]))
-                   ,A2($Html.li,
-                   _U.list([]),
-                   _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))]))
-                   ,A2($Html.li,
-                   _U.list([]),
-                   _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Game on!")]),_U.list([]))]))]))]))]));
-   var pendingImplementationView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Not yet implemented")]));
-   var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading game...")]));
-   var mainView = function (lobby) {
-      var _p0 = lobby.status;
-      switch (_p0.ctor)
-      {case "Unknown": return loadingView;
-         case "NotStarted": return registrationView;
-         default: return pendingImplementationView;}
+   var registrationView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("registration modal")]),
+      _U.list([A2($Html.h2,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("Let\'s get started!")]))
+              ,A2($Html.form,
+              _U.list([A2($DotsAndBoxes$CustomEvent.onSubmit,address,$DotsAndBoxes$Action.SignUp)]),
+              _U.list([A2($Html.ul,
+              _U.list([]),
+              _U.list([A2($Html.li,
+                      _U.list([]),
+                      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("player_name")]),_U.list([$Html.text("First, what\'s your name?")]))
+                              ,A2($Html.input,
+                              _U.list([$Html$Attributes.type$("text")
+                                      ,$Html$Attributes.id("player_name")
+                                      ,A3($Html$Events.on,
+                                      "input",
+                                      $Html$Events.targetValue,
+                                      function (_p0) {
+                                         return A2($Signal.message,address,$DotsAndBoxes$Action.SetPlayerName(_p0));
+                                      })]),
+                              _U.list([]))]))
+                      ,A2($Html.li,
+                      _U.list([]),
+                      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))]))
+                      ,A2($Html.li,
+                      _U.list([]),
+                      _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Game on!")]),_U.list([]))]))]))]))]));
+   });
+   var pendingImplementationView = function (model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("modal")]),
+      _U.list([$Html.text(A2($Basics._op["++"],"Not yet implemented: ",$Basics.toString(model.game_id)))
+              ,$Html.text(A2($Basics._op["++"],"Player name: ",model.player_name))]));
    };
+   var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading game...")]));
+   var mainView = F2(function (address,model) {
+      var _p1 = model.lobby.status;
+      switch (_p1.ctor)
+      {case "Unknown": return loadingView;
+         case "NotStarted": return A2(registrationView,address,model);
+         default: return pendingImplementationView(model);}
+   });
    return _elm.DotsAndBoxes.View.values = {_op: _op
                                           ,mainView: mainView
                                           ,loadingView: loadingView

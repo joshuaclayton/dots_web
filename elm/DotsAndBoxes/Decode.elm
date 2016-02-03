@@ -1,8 +1,15 @@
 module DotsAndBoxes.Decode where
 
-import Json.Decode exposing (Decoder, succeed, andThen, int, string, (:=))
+import Json.Encode as Json
+import Json.Decode exposing (Decoder, decodeValue, succeed, andThen, int, string, (:=))
 import Json.Decode.Extra exposing ((|:))
-import DotsAndBoxes.Model exposing (Lobby, GameStatus)
+import DotsAndBoxes.Model exposing (nullLobby, Lobby, GameStatus)
+
+decodeLobby : Json.Value -> Lobby
+decodeLobby payload =
+  let decodedLobby = decodeValue lobbyDecoder payload
+  in
+     Result.withDefault nullLobby decodedLobby
 
 lobbyStatus : String -> GameStatus
 lobbyStatus status =

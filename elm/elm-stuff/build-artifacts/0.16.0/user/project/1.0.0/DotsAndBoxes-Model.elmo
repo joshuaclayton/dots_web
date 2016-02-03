@@ -13,11 +13,19 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var Game = function (a) {    return {id: a};};
+   var Model = F3(function (a,b,c) {    return {lobby: a,game_id: b,player_name: c};});
    var Lobby = F3(function (a,b,c) {    return {width: a,height: b,status: c};});
    var Started = {ctor: "Started"};
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown};
-   return _elm.DotsAndBoxes.Model.values = {_op: _op,Unknown: Unknown,NotStarted: NotStarted,Started: Started,Lobby: Lobby,Game: Game,nullLobby: nullLobby};
+   var nullModel = {game_id: 0,lobby: nullLobby,player_name: "Player Name"};
+   return _elm.DotsAndBoxes.Model.values = {_op: _op
+                                           ,Unknown: Unknown
+                                           ,NotStarted: NotStarted
+                                           ,Started: Started
+                                           ,Lobby: Lobby
+                                           ,Model: Model
+                                           ,nullLobby: nullLobby
+                                           ,nullModel: nullModel};
 };

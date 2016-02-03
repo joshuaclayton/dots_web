@@ -6,11 +6,10 @@ Elm.DotsAndBoxes.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
-   $DotsAndBoxes$Decode = Elm.DotsAndBoxes.Decode.make(_elm),
+   $DotsAndBoxes$Action = Elm.DotsAndBoxes.Action.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $DotsAndBoxes$View = Elm.DotsAndBoxes.View.make(_elm),
    $Html = Elm.Html.make(_elm),
-   $Json$Decode = Elm.Json.Decode.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
@@ -23,11 +22,17 @@ Elm.DotsAndBoxes.make = function (_elm) {
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
-   var updateLobby = F2(function (payload,oldLobby) {
-      var newLobby = A2($Json$Decode.decodeValue,$DotsAndBoxes$Decode.lobbyDecoder,payload);
-      return A2($Result.withDefault,oldLobby,newLobby);
-   });
-   var lobbyState = A3($Signal.foldp,updateLobby,$DotsAndBoxes$Model.nullLobby,setState);
-   var main = A2($Signal.map,$DotsAndBoxes$View.mainView,lobbyState);
-   return _elm.DotsAndBoxes.values = {_op: _op,updateLobby: updateLobby,lobbyState: lobbyState,main: main};
+   var updateGameState = A2($Signal.map,function (payload) {    return $DotsAndBoxes$Action.UpdateGameState(payload);},setState);
+   var updateGameId = A2($Signal.map,function (game_id) {    return $DotsAndBoxes$Action.UpdateGameId(game_id);},setGameId);
+   var actions = $Signal.mailbox($DotsAndBoxes$Action.NoOp);
+   var inputs = $Signal.mergeMany(_U.list([actions.signal,updateGameId,updateGameState]));
+   var model = A3($Signal.foldp,$DotsAndBoxes$Action.update,$DotsAndBoxes$Model.nullModel,inputs);
+   var main = A2($Signal.map,$DotsAndBoxes$View.mainView(actions.address),model);
+   return _elm.DotsAndBoxes.values = {_op: _op
+                                     ,model: model
+                                     ,inputs: inputs
+                                     ,actions: actions
+                                     ,updateGameId: updateGameId
+                                     ,updateGameState: updateGameState
+                                     ,main: main};
 };
