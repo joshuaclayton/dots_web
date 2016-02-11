@@ -9,6 +9,7 @@ type Action
   | UpdateGameId Int
   | UpdateGameState Json.Value
   | SetPlayerName String
+  | ChooseSize Int
   | SignUp
 
 update : Action -> Model -> Model
@@ -17,5 +18,7 @@ update action model =
     NoOp -> model
     UpdateGameState payload -> { model | lobby = decodeLobby payload }
     UpdateGameId game_id -> { model | game_id = game_id }
-    SetPlayerName name -> { model | player_name = name }
+    SetPlayerName "" -> { model | player_name = Nothing }
+    SetPlayerName name -> { model | player_name = Just name }
     SignUp -> model
+    ChooseSize board_size -> { model | board_size = board_size }

@@ -17,8 +17,30 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var _op = {};
+   var setPlayerName = function (fieldValue) {    return $DotsAndBoxes$Action.SetPlayerName($String.trim(fieldValue));};
+   var registrationSubmitDisabled = function (model) {
+      var _p0 = {ctor: "_Tuple2",_0: model.player_name,_1: model.board_size};
+      if (_p0._0.ctor === "Nothing") {
+            return $Html$Attributes.disabled(true);
+         } else {
+            if (_p0._1 === 0) {
+                  return $Html$Attributes.disabled(true);
+               } else {
+                  return $Html$Attributes.disabled(false);
+               }
+         }
+   };
+   var sizeSelector = F3(function (address,model,size) {
+      var chosenClass = _U.eq(model.board_size,size) ? "chosen" : "";
+      var sizeString = $Basics.toString(size);
+      var displaySize = A2($Basics._op["++"],sizeString,A2($Basics._op["++"],"x",sizeString));
+      return A2($Html.a,
+      _U.list([A2($Html$Events.onClick,address,$DotsAndBoxes$Action.ChooseSize(size)),$Html$Attributes.$class(chosenClass)]),
+      _U.list([$Html.text(displaySize)]));
+   });
    var registrationView = F2(function (address,model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("registration modal")]),
@@ -36,27 +58,33 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
                                       ,A3($Html$Events.on,
                                       "input",
                                       $Html$Events.targetValue,
-                                      function (_p0) {
-                                         return A2($Signal.message,address,$DotsAndBoxes$Action.SetPlayerName(_p0));
-                                      })]),
+                                      function (_p1) {
+                                         return A2($Signal.message,address,setPlayerName(_p1));
+                                      })
+                                      ,$Html$Attributes.autocomplete(false)]),
                               _U.list([]))]))
                       ,A2($Html.li,
                       _U.list([]),
-                      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))]))
+                      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))
+                              ,A2($Html.section,
+                              _U.list([$Html$Attributes.$class("size-selector")]),
+                              A2($List.map,A2(sizeSelector,address,model),_U.list([2,5,10])))]))
                       ,A2($Html.li,
                       _U.list([]),
-                      _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Game on!")]),_U.list([]))]))]))]))]));
+                      _U.list([A2($Html.input,
+                      _U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Game on!"),registrationSubmitDisabled(model)]),
+                      _U.list([]))]))]))]))]));
    });
    var pendingImplementationView = function (model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("modal")]),
       _U.list([$Html.text(A2($Basics._op["++"],"Not yet implemented: ",$Basics.toString(model.game_id)))
-              ,$Html.text(A2($Basics._op["++"],"Player name: ",model.player_name))]));
+              ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))]));
    };
    var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading game...")]));
    var mainView = F2(function (address,model) {
-      var _p1 = model.lobby.status;
-      switch (_p1.ctor)
+      var _p2 = model.lobby.status;
+      switch (_p2.ctor)
       {case "Unknown": return loadingView;
          case "NotStarted": return A2(registrationView,address,model);
          default: return pendingImplementationView(model);}
@@ -65,5 +93,8 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
                                           ,mainView: mainView
                                           ,loadingView: loadingView
                                           ,pendingImplementationView: pendingImplementationView
+                                          ,sizeSelector: sizeSelector
+                                          ,registrationSubmitDisabled: registrationSubmitDisabled
+                                          ,setPlayerName: setPlayerName
                                           ,registrationView: registrationView};
 };

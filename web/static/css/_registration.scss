@@ -57,14 +57,19 @@ form {
 
     a {
       font-family: $sans-serif-family;
-      background: $brighter-blue;
-      color: $white;
+      background: desaturate($brighter-blue, 40%);
+      color: $light-gray;
       border-radius: 3px;
       padding: .5em 1em;
       font-size: 1.5em;
       width: calc(33% - 4em);
       text-align: center;
       cursor: pointer;
+
+      &.chosen {
+        background: $brighter-blue;
+        color: $white;
+      }
     }
   }
 }

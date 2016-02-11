@@ -13,13 +13,13 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var Model = F3(function (a,b,c) {    return {lobby: a,game_id: b,player_name: c};});
+   var Model = F4(function (a,b,c,d) {    return {lobby: a,game_id: b,player_name: c,board_size: d};});
    var Lobby = F3(function (a,b,c) {    return {width: a,height: b,status: c};});
    var Started = {ctor: "Started"};
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown};
-   var nullModel = {game_id: 0,lobby: nullLobby,player_name: "Player Name"};
+   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0};
    return _elm.DotsAndBoxes.Model.values = {_op: _op
                                            ,Unknown: Unknown
                                            ,NotStarted: NotStarted

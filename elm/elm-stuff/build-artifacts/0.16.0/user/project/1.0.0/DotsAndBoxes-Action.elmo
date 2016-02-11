@@ -22,10 +22,16 @@ Elm.DotsAndBoxes.Action.make = function (_elm) {
       {case "NoOp": return model;
          case "UpdateGameState": return _U.update(model,{lobby: $DotsAndBoxes$Decode.decodeLobby(_p0._0)});
          case "UpdateGameId": return _U.update(model,{game_id: _p0._0});
-         case "SetPlayerName": return _U.update(model,{player_name: _p0._0});
-         default: return model;}
+         case "SetPlayerName": if (_p0._0 === "") {
+                 return _U.update(model,{player_name: $Maybe.Nothing});
+              } else {
+                 return _U.update(model,{player_name: $Maybe.Just(_p0._0)});
+              }
+         case "SignUp": return model;
+         default: return _U.update(model,{board_size: _p0._0});}
    });
    var SignUp = {ctor: "SignUp"};
+   var ChooseSize = function (a) {    return {ctor: "ChooseSize",_0: a};};
    var SetPlayerName = function (a) {    return {ctor: "SetPlayerName",_0: a};};
    var UpdateGameState = function (a) {    return {ctor: "UpdateGameState",_0: a};};
    var UpdateGameId = function (a) {    return {ctor: "UpdateGameId",_0: a};};
@@ -35,6 +41,7 @@ Elm.DotsAndBoxes.Action.make = function (_elm) {
                                             ,UpdateGameId: UpdateGameId
                                             ,UpdateGameState: UpdateGameState
                                             ,SetPlayerName: SetPlayerName
+                                            ,ChooseSize: ChooseSize
                                             ,SignUp: SignUp
                                             ,update: update};
 };
