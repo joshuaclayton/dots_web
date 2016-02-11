@@ -23,6 +23,9 @@ import socket from "./socket"
 import Game from "./components/game"
 window.Game = Game;
 
+import Elm from "./elm/DotsAndBoxes"
+window.Elm = Elm;
+
 let channel = socket.channel("game", {});
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })

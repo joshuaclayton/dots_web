@@ -1,0 +1,36 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.View = Elm.DotsAndBoxes.View || {};
+Elm.DotsAndBoxes.View.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.View = _elm.DotsAndBoxes.View || {};
+   if (_elm.DotsAndBoxes.View.values) return _elm.DotsAndBoxes.View.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Action = Elm.DotsAndBoxes.Action.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $DotsAndBoxes$RegistrationView = Elm.DotsAndBoxes.RegistrationView.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var pendingImplementationView = function (model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("modal")]),
+      _U.list([$Html.text(A2($Basics._op["++"],"Not yet implemented: ",$Basics.toString(model.game_id)))
+              ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))]));
+   };
+   var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading the game...")]));
+   var mainView = F2(function (address,model) {
+      var _p0 = model.lobby.status;
+      switch (_p0.ctor)
+      {case "Unknown": return loadingView;
+         case "NotStarted": return A2($DotsAndBoxes$RegistrationView.registrationView,address,model);
+         default: return pendingImplementationView(model);}
+   });
+   return _elm.DotsAndBoxes.View.values = {_op: _op,mainView: mainView,loadingView: loadingView,pendingImplementationView: pendingImplementationView};
+};
