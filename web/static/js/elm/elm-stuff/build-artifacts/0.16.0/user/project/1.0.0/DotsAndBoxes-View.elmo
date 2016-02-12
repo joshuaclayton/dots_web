@@ -17,11 +17,18 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var separatedList = function (words) {
+      return A3($List.foldr,F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"",A2($List.intersperse,", ",words));
+   };
    var pendingImplementationView = function (model) {
+      var playerNames = separatedList(A2($List.map,function (_) {    return _.name;},model.lobby.game.players));
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("modal")]),
       _U.list([$Html.text(A2($Basics._op["++"],"Not yet implemented: ",$Basics.toString(model.game_id)))
-              ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))]));
+              ,A2($Html.br,_U.list([]),_U.list([]))
+              ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))
+              ,A2($Html.br,_U.list([]),_U.list([]))
+              ,$Html.text(A2($Basics._op["++"],"Players present: ",playerNames))]));
    };
    var notStartedView = F2(function (address,model) {
       var _p0 = model.player;
@@ -43,5 +50,6 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
                                           ,mainView: mainView
                                           ,loadingView: loadingView
                                           ,notStartedView: notStartedView
+                                          ,separatedList: separatedList
                                           ,pendingImplementationView: pendingImplementationView};
 };

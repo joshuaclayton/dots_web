@@ -12,7 +12,6 @@ Elm.Repl.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var tsol = {ctor: "_Tuple0"};
-   var foo = function (value) {    return value;};
-   var deltron3030 = F2(function (x,y) {    return function (_p0) {    return x(y(_p0));};})(foo);
-   return _elm.Repl.values = {_op: _op,deltron3030: deltron3030,foo: foo,tsol: tsol};
+   var deltron3030 = {a: 1};
+   return _elm.Repl.values = {_op: _op,deltron3030: deltron3030,tsol: tsol};
 };

@@ -10,12 +10,19 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    $Debug = Elm.Debug.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $Json$Decode = Elm.Json.Decode.make(_elm),
+   $Json$Decode$Extra = Elm.Json.Decode.Extra.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var playerDecoder = A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Player),A2($Json$Decode._op[":="],"name",$Json$Decode.string));
+   var gameDecoder = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   $Json$Decode.succeed($DotsAndBoxes$Model.Game),
+   A2($Json$Decode._op[":="],"current_player",$Json$Decode.oneOf(_U.list([$Json$Decode.$int,$Json$Decode.$null(0)])))),
+   A2($Json$Decode._op[":="],"players",$Json$Decode.list(playerDecoder)));
    var lobbyStatus = function (status) {
       var _p0 = status;
       switch (_p0)
@@ -24,14 +31,22 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
          default: return $DotsAndBoxes$Model.Unknown;}
    };
    var decodeStatus = function (status) {    return $Json$Decode.succeed(lobbyStatus(status));};
-   var lobbyDecoder = A4($Json$Decode.object3,
-   $DotsAndBoxes$Model.Lobby,
-   A2($Json$Decode._op[":="],"width",$Json$Decode.$int),
-   A2($Json$Decode._op[":="],"height",$Json$Decode.$int),
-   A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"status",$Json$Decode.string),decodeStatus));
+   var lobbyDecoder = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Lobby),A2($Json$Decode._op[":="],"width",$Json$Decode.$int)),
+   A2($Json$Decode._op[":="],"height",$Json$Decode.$int)),
+   A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"status",$Json$Decode.string),decodeStatus)),
+   A2($Json$Decode._op[":="],"game",gameDecoder));
    var decodeLobby = function (payload) {
       var decodedLobby = A2($Json$Decode.decodeValue,lobbyDecoder,payload);
       return A2($Result.withDefault,$DotsAndBoxes$Model.nullLobby,decodedLobby);
    };
-   return _elm.DotsAndBoxes.Decode.values = {_op: _op,decodeLobby: decodeLobby,lobbyStatus: lobbyStatus,decodeStatus: decodeStatus,lobbyDecoder: lobbyDecoder};
+   return _elm.DotsAndBoxes.Decode.values = {_op: _op
+                                            ,decodeLobby: decodeLobby
+                                            ,lobbyStatus: lobbyStatus
+                                            ,decodeStatus: decodeStatus
+                                            ,playerDecoder: playerDecoder
+                                            ,gameDecoder: gameDecoder
+                                            ,lobbyDecoder: lobbyDecoder};
 };

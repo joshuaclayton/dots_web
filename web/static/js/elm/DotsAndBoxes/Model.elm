@@ -15,10 +15,16 @@ type Action
 type alias Player =
   { name: String }
 
+type alias Game =
+  { current_player: Int
+  , players: List Player
+  }
+
 type alias Lobby =
   { width: Int
   , height: Int
   , status: GameStatus
+  , game: Game
   }
 
 type alias Model =
@@ -30,8 +36,11 @@ type alias Model =
   , player: Maybe Player
   }
 
+nullGame : Game
+nullGame = { players = [], current_player = 0 }
+
 nullLobby : Lobby
-nullLobby = { width = 0, height = 0, status = Unknown }
+nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }
 
 nullModel : Model
 nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp, player = Nothing }
