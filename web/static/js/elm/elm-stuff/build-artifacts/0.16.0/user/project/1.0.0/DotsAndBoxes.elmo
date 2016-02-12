@@ -52,7 +52,7 @@ Elm.DotsAndBoxes.make = function (_elm) {
    function (v) {
       return v;
    },
-   A2($Signal.map,function (jsonValue) {    return A2($Json$Encode.encode,0,jsonValue);},outboundActionsPayload));
+   $Signal.map($Json$Encode.encode(0))(outboundActionsPayload));
    var main = A2($Signal.map,$DotsAndBoxes$View.mainView(actions.address),model);
    return _elm.DotsAndBoxes.values = {_op: _op
                                      ,model: model

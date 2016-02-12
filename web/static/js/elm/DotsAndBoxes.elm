@@ -65,4 +65,4 @@ port setState : Signal Json.Value
 
 port broadcastUpdates : Signal String
 port broadcastUpdates =
-  Signal.map (\jsonValue -> Json.encode 0 jsonValue) outboundActionsPayload
+  (Signal.map <| Json.encode 0) outboundActionsPayload
