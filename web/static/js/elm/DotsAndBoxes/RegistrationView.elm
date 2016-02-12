@@ -28,14 +28,7 @@ registrationView address model =
               ]
               []
           ],
-          li [] [
-            label
-              [for "board_size"]
-              [text "Next, what board size do you prefer?"]
-          , section
-            [class "size-selector"]
-            (List.map (sizeSelector address model) [2, 5, 10])
-          ],
+          boardSizeSelector address model,
           li [] [
             input
               [type' "submit", value "Game on!", registrationSubmitDisabled model]
@@ -43,6 +36,26 @@ registrationView address model =
           ]
         ]
       ]
+    ]
+
+boardChosen : Model -> Bool
+boardChosen model =
+  case (model.lobby.width, model.lobby.height) of
+    (0, 0) -> False
+    (_, _) -> True
+
+boardSizeSelector : Address Action -> Model -> Html
+boardSizeSelector address model =
+  if boardChosen model then
+    li [] []
+  else
+    li [] [
+      label
+        [for "board_size"]
+        [text "Next, what board size do you prefer?"]
+    , section
+      [class "size-selector"]
+      (List.map (sizeSelector address model) [2, 5, 10])
     ]
 
 sizeSelector : Address Action -> Model -> Int -> Html

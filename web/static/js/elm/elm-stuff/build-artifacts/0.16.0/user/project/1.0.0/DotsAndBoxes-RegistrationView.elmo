@@ -41,6 +41,20 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
       _U.list([A2($Html$Events.onClick,address,$DotsAndBoxes$Model.ChooseSize(size)),$Html$Attributes.$class(chosenClass)]),
       _U.list([$Html.text(formattedBoardSize(size))]));
    });
+   var boardChosen = function (model) {
+      var _p1 = {ctor: "_Tuple2",_0: model.lobby.width,_1: model.lobby.height};
+      if (_p1._0 === 0 && _p1._1 === 0) {
+            return false;
+         } else {
+            return true;
+         }
+   };
+   var boardSizeSelector = F2(function (address,model) {
+      return boardChosen(model) ? A2($Html.li,_U.list([]),_U.list([])) : A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))
+              ,A2($Html.section,_U.list([$Html$Attributes.$class("size-selector")]),A2($List.map,A2(sizeSelector,address,model),_U.list([2,5,10])))]));
+   });
    var registrationView = F2(function (address,model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("registration modal")]),
@@ -58,17 +72,12 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
                                       ,A3($Html$Events.on,
                                       "input",
                                       $Html$Events.targetValue,
-                                      function (_p1) {
-                                         return A2($Signal.message,address,setPlayerName(_p1));
+                                      function (_p2) {
+                                         return A2($Signal.message,address,setPlayerName(_p2));
                                       })
                                       ,$Html$Attributes.autocomplete(false)]),
                               _U.list([]))]))
-                      ,A2($Html.li,
-                      _U.list([]),
-                      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("board_size")]),_U.list([$Html.text("Next, what board size do you prefer?")]))
-                              ,A2($Html.section,
-                              _U.list([$Html$Attributes.$class("size-selector")]),
-                              A2($List.map,A2(sizeSelector,address,model),_U.list([2,5,10])))]))
+                      ,A2(boardSizeSelector,address,model)
                       ,A2($Html.li,
                       _U.list([]),
                       _U.list([A2($Html.input,
@@ -77,6 +86,8 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
    });
    return _elm.DotsAndBoxes.RegistrationView.values = {_op: _op
                                                       ,registrationView: registrationView
+                                                      ,boardChosen: boardChosen
+                                                      ,boardSizeSelector: boardSizeSelector
                                                       ,sizeSelector: sizeSelector
                                                       ,formattedBoardSize: formattedBoardSize
                                                       ,setPlayerName: setPlayerName
