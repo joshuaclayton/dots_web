@@ -14,8 +14,9 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var Model = F5(function (a,b,c,d,e) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e};});
+   var Model = F6(function (a,b,c,d,e,f) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e,player: f};});
    var Lobby = F3(function (a,b,c) {    return {width: a,height: b,status: c};});
+   var Player = function (a) {    return {name: a};};
    var SignUp = {ctor: "SignUp"};
    var ChooseSize = function (a) {    return {ctor: "ChooseSize",_0: a};};
    var SetPlayerName = function (a) {    return {ctor: "SetPlayerName",_0: a};};
@@ -26,7 +27,7 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown};
-   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0,last_action: NoOp};
+   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0,last_action: NoOp,player: $Maybe.Nothing};
    return _elm.DotsAndBoxes.Model.values = {_op: _op
                                            ,Unknown: Unknown
                                            ,NotStarted: NotStarted
@@ -37,6 +38,7 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
                                            ,SetPlayerName: SetPlayerName
                                            ,ChooseSize: ChooseSize
                                            ,SignUp: SignUp
+                                           ,Player: Player
                                            ,Lobby: Lobby
                                            ,Model: Model
                                            ,nullLobby: nullLobby

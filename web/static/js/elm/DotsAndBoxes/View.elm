@@ -21,7 +21,9 @@ loadingView =
 
 notStartedView : Address Action -> Model -> Html
 notStartedView address model =
-  registrationView address model
+  case model.player of
+    Nothing -> registrationView address model
+    _ -> pendingImplementationView model
 
 pendingImplementationView : Model -> Html
 pendingImplementationView model =

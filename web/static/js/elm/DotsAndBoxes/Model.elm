@@ -12,6 +12,9 @@ type Action
   | ChooseSize Int
   | SignUp
 
+type alias Player =
+  { name: String }
+
 type alias Lobby =
   { width: Int
   , height: Int
@@ -24,10 +27,11 @@ type alias Model =
   , player_name: Maybe String
   , board_size: Int
   , last_action: Action
+  , player: Maybe Player
   }
 
 nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown }
 
 nullModel : Model
-nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp }
+nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp, player = Nothing }

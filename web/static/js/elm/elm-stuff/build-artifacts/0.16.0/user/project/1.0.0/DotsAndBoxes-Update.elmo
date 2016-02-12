@@ -16,6 +16,7 @@ Elm.DotsAndBoxes.Update.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var update = F2(function (action,model) {
+      var newPlayer = {name: A2($Maybe.withDefault,"",model.player_name)};
       var modelWithAction = _U.update(model,{last_action: action});
       var _p0 = action;
       switch (_p0.ctor)
@@ -27,7 +28,7 @@ Elm.DotsAndBoxes.Update.make = function (_elm) {
               } else {
                  return _U.update(modelWithAction,{player_name: $Maybe.Just(_p0._0)});
               }
-         case "SignUp": return modelWithAction;
+         case "SignUp": return _U.update(modelWithAction,{player: $Maybe.Just(newPlayer)});
          default: return _U.update(modelWithAction,{board_size: _p0._0});}
    });
    return _elm.DotsAndBoxes.Update.values = {_op: _op,update: update};
