@@ -22,8 +22,8 @@ Elm.DotsAndBoxes.make = function (_elm) {
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
-   var updateGameState = A2($Signal.map,function (payload) {    return $DotsAndBoxes$Model.UpdateGameState(payload);},setState);
-   var updateGameId = A2($Signal.map,function (game_id) {    return $DotsAndBoxes$Model.UpdateGameId(game_id);},setGameId);
+   var updateGameState = $Signal.map($DotsAndBoxes$Model.UpdateGameState)(setState);
+   var updateGameId = $Signal.map($DotsAndBoxes$Model.UpdateGameId)(setGameId);
    var actions = $Signal.mailbox($DotsAndBoxes$Model.NoOp);
    var toPayloadValue = function (model) {
       var _p0 = model.last_action;

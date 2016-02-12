@@ -51,11 +51,11 @@ actions =
 
 updateGameId : Signal Action
 updateGameId =
-  Signal.map (\game_id -> DotsAndBoxes.Model.UpdateGameId game_id) setGameId
+  (Signal.map <| DotsAndBoxes.Model.UpdateGameId) setGameId
 
 updateGameState : Signal Action
 updateGameState =
-  Signal.map (\payload -> DotsAndBoxes.Model.UpdateGameState payload) setState
+  (Signal.map <| DotsAndBoxes.Model.UpdateGameState) setState
 
 main : Signal Html
 main = Signal.map (mainView actions.address) model
