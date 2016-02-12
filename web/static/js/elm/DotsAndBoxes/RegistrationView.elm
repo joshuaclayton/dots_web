@@ -6,8 +6,7 @@ import Html.Attributes exposing (autocomplete, disabled, class, for, type', valu
 import String exposing (trim)
 import Signal exposing (Signal, Address)
 import DotsAndBoxes.CustomEvent exposing (onSubmit)
-import DotsAndBoxes.Model exposing (Model)
-import DotsAndBoxes.Action exposing (Action)
+import DotsAndBoxes.Model exposing (Model, Action)
 
 registrationView : Address Action -> Model -> Html
 registrationView address model =
@@ -16,7 +15,7 @@ registrationView address model =
     [
       h2 [class "title"] [text "Let's get started!"],
       form
-        [onSubmit address DotsAndBoxes.Action.SignUp]
+        [onSubmit address DotsAndBoxes.Model.SignUp]
         [
         ul [] [
           li [] [
@@ -51,7 +50,7 @@ sizeSelector address model size =
   let chosenClass = if model.board_size == size then "chosen" else ""
   in
   a
-    [ onClick address(DotsAndBoxes.Action.ChooseSize size)
+    [ onClick address(DotsAndBoxes.Model.ChooseSize size)
     , class chosenClass
     ]
     [text(formattedBoardSize size)]
@@ -66,7 +65,7 @@ formattedBoardSize size =
 
 setPlayerName : String -> Action
 setPlayerName fieldValue =
-  DotsAndBoxes.Action.SetPlayerName(trim fieldValue)
+  DotsAndBoxes.Model.SetPlayerName(trim fieldValue)
 
 registrationSubmitDisabled : Model -> Attribute
 registrationSubmitDisabled model =

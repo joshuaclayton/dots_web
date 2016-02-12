@@ -8,7 +8,6 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
-   $DotsAndBoxes$Action = Elm.DotsAndBoxes.Action.make(_elm),
    $DotsAndBoxes$CustomEvent = Elm.DotsAndBoxes.CustomEvent.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -32,14 +31,14 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
                }
          }
    };
-   var setPlayerName = function (fieldValue) {    return $DotsAndBoxes$Action.SetPlayerName($String.trim(fieldValue));};
+   var setPlayerName = function (fieldValue) {    return $DotsAndBoxes$Model.SetPlayerName($String.trim(fieldValue));};
    var formattedBoardSize = function (size) {
       return A3($List.foldr,F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"",A2($List.intersperse,"x",A2($List.repeat,2,$Basics.toString(size))));
    };
    var sizeSelector = F3(function (address,model,size) {
       var chosenClass = _U.eq(model.board_size,size) ? "chosen" : "";
       return A2($Html.a,
-      _U.list([A2($Html$Events.onClick,address,$DotsAndBoxes$Action.ChooseSize(size)),$Html$Attributes.$class(chosenClass)]),
+      _U.list([A2($Html$Events.onClick,address,$DotsAndBoxes$Model.ChooseSize(size)),$Html$Attributes.$class(chosenClass)]),
       _U.list([$Html.text(formattedBoardSize(size))]));
    });
    var registrationView = F2(function (address,model) {
@@ -47,7 +46,7 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
       _U.list([$Html$Attributes.$class("registration modal")]),
       _U.list([A2($Html.h2,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("Let\'s get started!")]))
               ,A2($Html.form,
-              _U.list([A2($DotsAndBoxes$CustomEvent.onSubmit,address,$DotsAndBoxes$Action.SignUp)]),
+              _U.list([A2($DotsAndBoxes$CustomEvent.onSubmit,address,$DotsAndBoxes$Model.SignUp)]),
               _U.list([A2($Html.ul,
               _U.list([]),
               _U.list([A2($Html.li,

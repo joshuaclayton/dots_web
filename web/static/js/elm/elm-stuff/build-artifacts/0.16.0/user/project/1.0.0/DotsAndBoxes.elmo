@@ -6,8 +6,8 @@ Elm.DotsAndBoxes.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
-   $DotsAndBoxes$Action = Elm.DotsAndBoxes.Action.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $DotsAndBoxes$Update = Elm.DotsAndBoxes.Update.make(_elm),
    $DotsAndBoxes$View = Elm.DotsAndBoxes.View.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
@@ -22,15 +22,45 @@ Elm.DotsAndBoxes.make = function (_elm) {
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
-   var updateGameState = A2($Signal.map,function (payload) {    return $DotsAndBoxes$Action.UpdateGameState(payload);},setState);
-   var updateGameId = A2($Signal.map,function (game_id) {    return $DotsAndBoxes$Action.UpdateGameId(game_id);},setGameId);
-   var actions = $Signal.mailbox($DotsAndBoxes$Action.NoOp);
+   var updateGameState = A2($Signal.map,function (payload) {    return $DotsAndBoxes$Model.UpdateGameState(payload);},setState);
+   var updateGameId = A2($Signal.map,function (game_id) {    return $DotsAndBoxes$Model.UpdateGameId(game_id);},setGameId);
+   var actions = $Signal.mailbox($DotsAndBoxes$Model.NoOp);
+   var toPayloadValue = function (model) {
+      var _p0 = model.last_action;
+      if (_p0.ctor === "SignUp") {
+            return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}
+                                               ,{ctor: "_Tuple2",_0: "width",_1: $Json$Encode.$int(model.board_size)}
+                                               ,{ctor: "_Tuple2",_0: "height",_1: $Json$Encode.$int(model.board_size)}
+                                               ,{ctor: "_Tuple2"
+                                                ,_0: "player"
+                                                ,_1: $Json$Encode.object(_U.list([{ctor: "_Tuple2"
+                                                                                  ,_0: "name"
+                                                                                  ,_1: $Json$Encode.string(A2($Maybe.withDefault,
+                                                                                  "Unknown",
+                                                                                  model.player_name))}]))}
+                                               ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:begin")}]));
+         } else {
+            return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}]));
+         }
+   };
+   var updateableAction = function (model) {    var _p1 = model.last_action;if (_p1.ctor === "SignUp") {    return true;} else {    return false;}};
    var inputs = $Signal.mergeMany(_U.list([actions.signal,updateGameId,updateGameState]));
-   var model = A3($Signal.foldp,$DotsAndBoxes$Action.update,$DotsAndBoxes$Model.nullModel,inputs);
+   var model = A3($Signal.foldp,$DotsAndBoxes$Update.update,$DotsAndBoxes$Model.nullModel,inputs);
+   var outboundModel = A3($Signal.filter,updateableAction,$DotsAndBoxes$Model.nullModel,model);
+   var outboundActionsPayload = A2($Signal.map,toPayloadValue,outboundModel);
+   var broadcastUpdates = Elm.Native.Port.make(_elm).outboundSignal("broadcastUpdates",
+   function (v) {
+      return v;
+   },
+   A2($Signal.map,function (jsonValue) {    return A2($Json$Encode.encode,0,jsonValue);},outboundActionsPayload));
    var main = A2($Signal.map,$DotsAndBoxes$View.mainView(actions.address),model);
    return _elm.DotsAndBoxes.values = {_op: _op
                                      ,model: model
                                      ,inputs: inputs
+                                     ,updateableAction: updateableAction
+                                     ,outboundModel: outboundModel
+                                     ,toPayloadValue: toPayloadValue
+                                     ,outboundActionsPayload: outboundActionsPayload
                                      ,actions: actions
                                      ,updateGameId: updateGameId
                                      ,updateGameState: updateGameState

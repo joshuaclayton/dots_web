@@ -1,0 +1,34 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.Update = Elm.DotsAndBoxes.Update || {};
+Elm.DotsAndBoxes.Update.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.Update = _elm.DotsAndBoxes.Update || {};
+   if (_elm.DotsAndBoxes.Update.values) return _elm.DotsAndBoxes.Update.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Decode = Elm.DotsAndBoxes.Decode.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var update = F2(function (action,model) {
+      var modelWithAction = _U.update(model,{last_action: action});
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "NoOp": return modelWithAction;
+         case "UpdateGameState": return _U.update(modelWithAction,{lobby: $DotsAndBoxes$Decode.decodeLobby(_p0._0)});
+         case "UpdateGameId": return _U.update(modelWithAction,{game_id: _p0._0});
+         case "SetPlayerName": if (_p0._0 === "") {
+                 return _U.update(modelWithAction,{player_name: $Maybe.Nothing});
+              } else {
+                 return _U.update(modelWithAction,{player_name: $Maybe.Just(_p0._0)});
+              }
+         case "SignUp": return modelWithAction;
+         default: return _U.update(modelWithAction,{board_size: _p0._0});}
+   });
+   return _elm.DotsAndBoxes.Update.values = {_op: _op,update: update};
+};

@@ -9,7 +9,16 @@
     var game = Elm.embed(Elm.DotsAndBoxes, document.getElementById('game-elm'), { setGameId: 0, setState: {} });
     game.ports.setGameId.send(<%= @game_id %>);
 
+    game.ports.broadcastUpdates.subscribe(function(data) {
+      var clonedData = Object.assign({}, JSON.parse(data));
+      var action = clonedData.action;
+      delete(clonedData.action);
+
+      channel.push(action, clonedData);
+    });
+
     window.channel.on("game:update:<%= @game_id %>", function(payload) {
+      console.log('receiving payload', payload);
       game.ports.setState.send(payload.lobby);
     });
   });

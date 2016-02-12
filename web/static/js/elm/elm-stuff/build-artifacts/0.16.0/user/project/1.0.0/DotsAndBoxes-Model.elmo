@@ -8,22 +8,35 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var Model = F4(function (a,b,c,d) {    return {lobby: a,game_id: b,player_name: c,board_size: d};});
+   var Model = F5(function (a,b,c,d,e) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e};});
    var Lobby = F3(function (a,b,c) {    return {width: a,height: b,status: c};});
+   var SignUp = {ctor: "SignUp"};
+   var ChooseSize = function (a) {    return {ctor: "ChooseSize",_0: a};};
+   var SetPlayerName = function (a) {    return {ctor: "SetPlayerName",_0: a};};
+   var UpdateGameState = function (a) {    return {ctor: "UpdateGameState",_0: a};};
+   var UpdateGameId = function (a) {    return {ctor: "UpdateGameId",_0: a};};
+   var NoOp = {ctor: "NoOp"};
    var Started = {ctor: "Started"};
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown};
-   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0};
+   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0,last_action: NoOp};
    return _elm.DotsAndBoxes.Model.values = {_op: _op
                                            ,Unknown: Unknown
                                            ,NotStarted: NotStarted
                                            ,Started: Started
+                                           ,NoOp: NoOp
+                                           ,UpdateGameId: UpdateGameId
+                                           ,UpdateGameState: UpdateGameState
+                                           ,SetPlayerName: SetPlayerName
+                                           ,ChooseSize: ChooseSize
+                                           ,SignUp: SignUp
                                            ,Lobby: Lobby
                                            ,Model: Model
                                            ,nullLobby: nullLobby
