@@ -21,6 +21,7 @@ updateableAction : Model -> Bool
 updateableAction model =
   case model.last_action of
     DotsAndBoxes.Model.SignUp -> True
+    DotsAndBoxes.Model.StartGame -> True
     _ -> False
 
 outboundModel : Signal Model
@@ -36,6 +37,10 @@ toPayloadValue model =
       , ("height", int model.board_size)
       , ("player", object [("name", string(Maybe.withDefault "Unknown" model.player_name))])
       , ("action", string "game:begin")
+      ]
+    DotsAndBoxes.Model.StartGame ->
+      object [ ("game_id", int model.game_id)
+      , ("action", string "game:start")
       ]
     _ ->
       object

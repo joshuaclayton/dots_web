@@ -20,11 +20,11 @@ Elm.DotsAndBoxes.RegistrationView.make = function (_elm) {
    $String = Elm.String.make(_elm);
    var _op = {};
    var registrationSubmitDisabled = function (model) {
-      var _p0 = {ctor: "_Tuple2",_0: model.player_name,_1: model.board_size};
+      var _p0 = {ctor: "_Tuple3",_0: model.player_name,_1: model.board_size,_2: model.lobby.width};
       if (_p0._0.ctor === "Nothing") {
             return $Html$Attributes.disabled(true);
          } else {
-            if (_p0._1 === 0) {
+            if (_p0._1 === 0 && _p0._2 === 0) {
                   return $Html$Attributes.disabled(true);
                } else {
                   return $Html$Attributes.disabled(false);

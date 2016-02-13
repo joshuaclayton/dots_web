@@ -8,6 +8,7 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$CustomEvent = Elm.DotsAndBoxes.CustomEvent.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $DotsAndBoxes$RegistrationView = Elm.DotsAndBoxes.RegistrationView.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -30,15 +31,35 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
               ,A2($Html.br,_U.list([]),_U.list([]))
               ,$Html.text(A2($Basics._op["++"],"Players present: ",playerNames))]));
    };
+   var playersList = function (players) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("players-list")]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Players")]))
+              ,A2($Html.ul,_U.list([]),A2($List.map,function (player) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(player.name)]));},players))]));
+   };
+   var startGameForm = function (address) {
+      return A2($Html.form,
+      _U.list([A2($DotsAndBoxes$CustomEvent.onSubmit,address,$DotsAndBoxes$Model.StartGame)]),
+      _U.list([A2($Html.ul,
+      _U.list([]),
+      _U.list([A2($Html.li,
+      _U.list([]),
+      _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Start the game")]),_U.list([]))]))]))]));
+   };
+   var waitingForOtherPlayersView = F2(function (address,model) {
+      return A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([playersList(model.lobby.game.players),startGameForm(address)]));
+   });
    var notStartedView = F2(function (address,model) {
       var _p0 = model.player;
       if (_p0.ctor === "Nothing") {
             return A2($DotsAndBoxes$RegistrationView.registrationView,address,model);
          } else {
-            return pendingImplementationView(model);
+            return A2(waitingForOtherPlayersView,address,model);
          }
    });
-   var loadingView = A2($Html.section,_U.list([$Html$Attributes.$class("modal")]),_U.list([$Html.text("Loading the game...")]));
+   var loadingView = A2($Html.section,
+   _U.list([$Html$Attributes.$class("modal loading")]),
+   _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Loading the game...")]))]));
    var mainView = F2(function (address,model) {
       var _p1 = model.lobby.status;
       switch (_p1.ctor)
@@ -50,6 +71,9 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
                                           ,mainView: mainView
                                           ,loadingView: loadingView
                                           ,notStartedView: notStartedView
+                                          ,waitingForOtherPlayersView: waitingForOtherPlayersView
+                                          ,startGameForm: startGameForm
+                                          ,playersList: playersList
                                           ,separatedList: separatedList
                                           ,pendingImplementationView: pendingImplementationView};
 };

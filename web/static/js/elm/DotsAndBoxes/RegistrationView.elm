@@ -82,7 +82,7 @@ setPlayerName fieldValue =
 
 registrationSubmitDisabled : Model -> Attribute
 registrationSubmitDisabled model =
-  case (model.player_name, model.board_size) of
-    (Nothing, _) -> disabled True
-    (_, 0)       -> disabled True
-    (_, _)       -> disabled False
+  case (model.player_name, model.board_size, model.lobby.width) of
+    (Nothing, _, _) -> disabled True
+    (_, 0, 0)       -> disabled True
+    (_, _, _)       -> disabled False

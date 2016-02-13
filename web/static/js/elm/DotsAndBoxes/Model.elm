@@ -11,12 +11,13 @@ type Action
   | SetPlayerName String
   | ChooseSize Int
   | SignUp
+  | StartGame
 
 type alias Player =
   { name: String }
 
 type alias Game =
-  { current_player: Int
+  { current_player: Player
   , players: List Player
   }
 
@@ -36,8 +37,11 @@ type alias Model =
   , player: Maybe Player
   }
 
+nullPlayer : Player
+nullPlayer = { name = "" }
+
 nullGame : Game
-nullGame = { players = [], current_player = 0 }
+nullGame = { players = [], current_player = nullPlayer }
 
 nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }

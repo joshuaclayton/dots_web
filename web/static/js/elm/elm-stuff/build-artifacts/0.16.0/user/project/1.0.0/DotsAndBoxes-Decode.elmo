@@ -21,7 +21,7 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    var gameDecoder = A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    $Json$Decode.succeed($DotsAndBoxes$Model.Game),
-   A2($Json$Decode._op[":="],"current_player",$Json$Decode.oneOf(_U.list([$Json$Decode.$int,$Json$Decode.$null(0)])))),
+   A2($Json$Decode._op[":="],"current_player",$Json$Decode.oneOf(_U.list([playerDecoder,$Json$Decode.$null($DotsAndBoxes$Model.nullPlayer)])))),
    A2($Json$Decode._op[":="],"players",$Json$Decode.list(playerDecoder)));
    var lobbyStatus = function (status) {
       var _p0 = status;
