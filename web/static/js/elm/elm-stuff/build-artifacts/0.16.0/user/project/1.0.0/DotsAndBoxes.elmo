@@ -17,11 +17,17 @@ Elm.DotsAndBoxes.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var setState = Elm.Native.Port.make(_elm).inboundSignal("setState","Json.Encode.Value",function (v) {    return v;});
+   var setPlayerGuid = Elm.Native.Port.make(_elm).inboundSignal("setPlayerGuid",
+   "DotsAndBoxes.Model.Guid",
+   function (v) {
+      return typeof v === "string" || typeof v === "object" && v instanceof String ? v : _U.badPort("a string",v);
+   });
    var setGameId = Elm.Native.Port.make(_elm).inboundSignal("setGameId",
    "Int",
    function (v) {
       return typeof v === "number" && isFinite(v) && Math.floor(v) === v ? v : _U.badPort("an integer",v);
    });
+   var updatePlayerGuid = $Signal.map($DotsAndBoxes$Model.UpdatePlayerGuid)(setPlayerGuid);
    var updateGameState = $Signal.map($DotsAndBoxes$Model.UpdateGameState)(setState);
    var updateGameId = $Signal.map($DotsAndBoxes$Model.UpdateGameId)(setGameId);
    var actions = $Signal.mailbox($DotsAndBoxes$Model.NoOp);
@@ -37,7 +43,10 @@ Elm.DotsAndBoxes.make = function (_elm) {
                                                                                             ,_0: "name"
                                                                                             ,_1: $Json$Encode.string(A2($Maybe.withDefault,
                                                                                             "Unknown",
-                                                                                            model.player_name))}]))}
+                                                                                            model.player_name))}
+                                                                                           ,{ctor: "_Tuple2"
+                                                                                            ,_0: "id"
+                                                                                            ,_1: $Json$Encode.string(model.player_guid)}]))}
                                                          ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:begin")}]));
          case "StartGame": return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}
                                                               ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:start")}]));
@@ -50,7 +59,7 @@ Elm.DotsAndBoxes.make = function (_elm) {
          case "StartGame": return true;
          default: return false;}
    };
-   var inputs = $Signal.mergeMany(_U.list([actions.signal,updateGameId,updateGameState]));
+   var inputs = $Signal.mergeMany(_U.list([actions.signal,updateGameId,updateGameState,updatePlayerGuid]));
    var model = A3($Signal.foldp,$DotsAndBoxes$Update.update,$DotsAndBoxes$Model.nullModel,inputs);
    var outboundModel = A3($Signal.filter,updateableAction,$DotsAndBoxes$Model.nullModel,model);
    var outboundActionsPayload = A2($Signal.map,toPayloadValue,outboundModel);
@@ -70,5 +79,6 @@ Elm.DotsAndBoxes.make = function (_elm) {
                                      ,actions: actions
                                      ,updateGameId: updateGameId
                                      ,updateGameState: updateGameState
+                                     ,updatePlayerGuid: updatePlayerGuid
                                      ,main: main};
 };

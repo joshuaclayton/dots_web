@@ -16,13 +16,14 @@ Elm.DotsAndBoxes.Update.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var update = F2(function (action,model) {
-      var newPlayer = _U.update($DotsAndBoxes$Model.nullPlayer,{name: A2($Maybe.withDefault,"",model.player_name)});
+      var newPlayer = _U.update($DotsAndBoxes$Model.nullPlayer,{name: A2($Maybe.withDefault,"",model.player_name),id: model.player_guid});
       var modelWithAction = _U.update(model,{last_action: action});
       var _p0 = action;
       switch (_p0.ctor)
       {case "NoOp": return modelWithAction;
          case "UpdateGameState": return _U.update(modelWithAction,{lobby: $DotsAndBoxes$Decode.decodeLobby(_p0._0)});
          case "UpdateGameId": return _U.update(modelWithAction,{game_id: _p0._0});
+         case "UpdatePlayerGuid": return _U.update(modelWithAction,{player_guid: _p0._0});
          case "SetPlayerName": if (_p0._0 === "") {
                  return _U.update(modelWithAction,{player_name: $Maybe.Nothing});
               } else {

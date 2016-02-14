@@ -14,16 +14,17 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var nullPlayer = {name: "",active: true};
+   var nullPlayer = {name: "",active: true,id: ""};
    var nullGame = {players: _U.list([]),current_player: nullPlayer};
-   var Model = F6(function (a,b,c,d,e,f) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e,player: f};});
+   var Model = F7(function (a,b,c,d,e,f,g) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e,player: f,player_guid: g};});
    var Lobby = F4(function (a,b,c,d) {    return {width: a,height: b,status: c,game: d};});
    var Game = F2(function (a,b) {    return {current_player: a,players: b};});
-   var Player = F2(function (a,b) {    return {name: a,active: b};});
+   var Player = F3(function (a,b,c) {    return {name: a,active: b,id: c};});
    var StartGame = {ctor: "StartGame"};
    var SignUp = {ctor: "SignUp"};
    var ChooseSize = function (a) {    return {ctor: "ChooseSize",_0: a};};
    var SetPlayerName = function (a) {    return {ctor: "SetPlayerName",_0: a};};
+   var UpdatePlayerGuid = function (a) {    return {ctor: "UpdatePlayerGuid",_0: a};};
    var UpdateGameState = function (a) {    return {ctor: "UpdateGameState",_0: a};};
    var UpdateGameId = function (a) {    return {ctor: "UpdateGameId",_0: a};};
    var NoOp = {ctor: "NoOp"};
@@ -31,7 +32,7 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown,game: nullGame};
-   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0,last_action: NoOp,player: $Maybe.Nothing};
+   var nullModel = {game_id: 0,lobby: nullLobby,player_name: $Maybe.Nothing,board_size: 0,last_action: NoOp,player: $Maybe.Nothing,player_guid: ""};
    return _elm.DotsAndBoxes.Model.values = {_op: _op
                                            ,Unknown: Unknown
                                            ,NotStarted: NotStarted
@@ -39,6 +40,7 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
                                            ,NoOp: NoOp
                                            ,UpdateGameId: UpdateGameId
                                            ,UpdateGameState: UpdateGameState
+                                           ,UpdatePlayerGuid: UpdatePlayerGuid
                                            ,SetPlayerName: SetPlayerName
                                            ,ChooseSize: ChooseSize
                                            ,SignUp: SignUp

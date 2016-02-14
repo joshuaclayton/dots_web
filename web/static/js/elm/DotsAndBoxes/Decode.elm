@@ -27,6 +27,7 @@ player =
   succeed Player
     |: ("name" := string)
     |: ("active" := bool)
+    |: ("id" := string)
 
 game : Decoder Game
 game =

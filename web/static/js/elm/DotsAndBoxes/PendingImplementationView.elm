@@ -13,5 +13,7 @@ pendingImplementationView model =
     , br [] []
     , text ("Player name: " ++ Maybe.withDefault "Not set" model.player_name)
     , br [] []
+    , text ("Player guid: " ++ model.player_guid)
+    , br [] []
     , playersList model.lobby.game.players
     ]

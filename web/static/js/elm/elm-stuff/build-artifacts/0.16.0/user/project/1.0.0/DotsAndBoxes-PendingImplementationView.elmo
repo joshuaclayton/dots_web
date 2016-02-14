@@ -24,6 +24,8 @@ Elm.DotsAndBoxes.PendingImplementationView.make = function (_elm) {
               ,A2($Html.br,_U.list([]),_U.list([]))
               ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))
               ,A2($Html.br,_U.list([]),_U.list([]))
+              ,$Html.text(A2($Basics._op["++"],"Player guid: ",model.player_guid))
+              ,A2($Html.br,_U.list([]),_U.list([]))
               ,$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players)]));
    };
    return _elm.DotsAndBoxes.PendingImplementationView.values = {_op: _op,pendingImplementationView: pendingImplementationView};

@@ -6,8 +6,9 @@
     var game = new Game(<%= @game_id %>, window.channel);
     game.register();
 
-    var game = Elm.embed(Elm.DotsAndBoxes, document.getElementById('game-elm'), { setGameId: 0, setState: {} });
+    var game = Elm.embed(Elm.DotsAndBoxes, document.getElementById('game-elm'), { setGameId: 0, setState: {}, setPlayerGuid: "" });
     game.ports.setGameId.send(<%= @game_id %>);
+    game.ports.setPlayerGuid.send(Guid.findOrCreate());
 
     game.ports.broadcastUpdates.subscribe(function(data) {
       var clonedData = Object.assign({}, JSON.parse(data));

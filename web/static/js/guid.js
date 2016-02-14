@@ -6,4 +6,14 @@ export default class Guid {
       return v.toString(16);
     });
   }
+
+  static findOrCreate(storage = localStorage) {
+    if(storage.getItem("playerGuid")) {
+      return storage.getItem("playerGuid");
+    } else {
+      const guid = this.generate();
+      storage.setItem("playerGuid", guid);
+      return guid;
+    }
+  }
 };
