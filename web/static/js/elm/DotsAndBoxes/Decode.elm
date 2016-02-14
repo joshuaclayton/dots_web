@@ -1,4 +1,4 @@
-module DotsAndBoxes.Decode where
+module DotsAndBoxes.Decode (decodeLobby) where
 
 import Json.Encode as Json
 import Json.Decode exposing (Decoder, null, oneOf, decodeValue, list, succeed, andThen, int, string, (:=))
@@ -7,7 +7,7 @@ import DotsAndBoxes.Model exposing (nullLobby, nullPlayer, Lobby, Game, Player, 
 
 decodeLobby : Json.Value -> Lobby
 decodeLobby payload =
-  let decodedLobby = decodeValue lobbyDecoder payload
+  let decodedLobby = decodeValue lobby payload
   in
      Result.withDefault nullLobby decodedLobby
 
@@ -22,21 +22,21 @@ decodeStatus : String -> Decoder GameStatus
 decodeStatus status =
   succeed (lobbyStatus status)
 
-playerDecoder : Decoder Player
-playerDecoder =
+player : Decoder Player
+player =
   succeed Player
     |: ("name" := string)
 
-gameDecoder : Decoder Game
-gameDecoder =
+game : Decoder Game
+game =
   succeed Game
-    |: ("current_player" := oneOf [playerDecoder, null nullPlayer])
-    |: ("players" := list playerDecoder)
+    |: ("current_player" := oneOf [player, null nullPlayer])
+    |: ("players" := list player)
 
-lobbyDecoder : Decoder Lobby
-lobbyDecoder =
+lobby : Decoder Lobby
+lobby =
   succeed Lobby
   |: ("width" := int)
   |: ("height" := int)
   |: (("status" := string) `andThen` decodeStatus)
-  |: ("game" := gameDecoder)
+  |: ("game" := game)
