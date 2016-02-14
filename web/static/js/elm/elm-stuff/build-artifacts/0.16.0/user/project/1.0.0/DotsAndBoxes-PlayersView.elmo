@@ -16,11 +16,14 @@ Elm.DotsAndBoxes.PlayersView.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var activeFlag = function (player) {    return player.active ? "" : "(inactive)";};
+   var player$ = function (player) {
+      return A2($Html.li,_U.list([]),_U.list([$Html.text(A2($Basics._op["++"],player.name,A2($Basics._op["++"]," ",activeFlag(player))))]));
+   };
    var playersList = function (players) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("players-list")]),
-      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Players")]))
-              ,A2($Html.ul,_U.list([]),A2($List.map,function (player) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(player.name)]));},players))]));
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Players")])),A2($Html.ul,_U.list([]),A2($List.map,player$,players))]));
    };
    return _elm.DotsAndBoxes.PlayersView.values = {_op: _op,playersList: playersList};
 };

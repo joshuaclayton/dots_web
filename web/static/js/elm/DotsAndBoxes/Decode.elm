@@ -1,7 +1,7 @@
 module DotsAndBoxes.Decode (decodeLobby) where
 
 import Json.Encode as Json
-import Json.Decode exposing (Decoder, null, oneOf, decodeValue, list, succeed, andThen, int, string, (:=))
+import Json.Decode exposing (Decoder, null, oneOf, decodeValue, list, succeed, andThen, int, string, bool, (:=))
 import Json.Decode.Extra exposing ((|:))
 import DotsAndBoxes.Model exposing (nullLobby, nullPlayer, Lobby, Game, Player, GameStatus)
 
@@ -26,6 +26,7 @@ player : Decoder Player
 player =
   succeed Player
     |: ("name" := string)
+    |: ("active" := bool)
 
 game : Decoder Game
 game =

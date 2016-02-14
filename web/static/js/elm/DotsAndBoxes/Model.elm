@@ -14,7 +14,9 @@ type Action
   | StartGame
 
 type alias Player =
-  { name: String }
+  { name: String
+  , active: Bool
+  }
 
 type alias Game =
   { current_player: Player
@@ -38,7 +40,7 @@ type alias Model =
   }
 
 nullPlayer : Player
-nullPlayer = { name = "" }
+nullPlayer = { name = "", active = True }
 
 nullGame : Game
 nullGame = { players = [], current_player = nullPlayer }

@@ -1,12 +1,12 @@
 module DotsAndBoxes.Update where
 
-import DotsAndBoxes.Model exposing (Action, Model)
+import DotsAndBoxes.Model exposing (Action, Model, nullPlayer)
 import DotsAndBoxes.Decode exposing (decodeLobby)
 
 update : Action -> Model -> Model
 update action model =
   let modelWithAction = { model | last_action = action }
-      newPlayer = { name = Maybe.withDefault "" model.player_name }
+      newPlayer = { nullPlayer | name = Maybe.withDefault "" model.player_name }
   in
   case action of
     DotsAndBoxes.Model.NoOp -> modelWithAction
