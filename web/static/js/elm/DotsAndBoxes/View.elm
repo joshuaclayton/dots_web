@@ -3,8 +3,10 @@ module DotsAndBoxes.View where
 import Html exposing (..)
 import Html.Attributes exposing (class, type', value)
 import Signal exposing (Address)
-import DotsAndBoxes.Model exposing (Action, Model, Player)
+import DotsAndBoxes.Model exposing (Action, Model)
 import DotsAndBoxes.RegistrationView exposing (registrationView)
+import DotsAndBoxes.PendingImplementationView exposing (pendingImplementationView)
+import DotsAndBoxes.PlayersView exposing (playersList)
 import DotsAndBoxes.CustomEvent exposing (onSubmit)
 
 mainView : Address Action -> Model -> Html
@@ -45,31 +47,4 @@ startGameForm address =
           input [type' "submit", value "Start the game"] []
         ]
       ]
-    ]
-
-playersList : List Player -> Html
-playersList players =
-  section
-    [class "players-list"]
-    [ h2 [] [text "Players"]
-    , ul [] (List.map (\player -> li [] [text player.name]) players)
-    ]
-
-separatedList : List String -> String
-separatedList words =
-  words
-  |> List.intersperse ", "
-  |> List.foldr (++) ""
-
-pendingImplementationView : Model -> Html
-pendingImplementationView model =
-  let playerNames = (List.map .name model.lobby.game.players) |> separatedList
-  in
-  section
-    [class "modal"]
-    [ text ("Not yet implemented: " ++ toString model.game_id)
-    , br [] []
-    , text ("Player name: " ++ Maybe.withDefault "Not set" model.player_name)
-    , br [] []
-    , text ("Players present: " ++ playerNames)
     ]

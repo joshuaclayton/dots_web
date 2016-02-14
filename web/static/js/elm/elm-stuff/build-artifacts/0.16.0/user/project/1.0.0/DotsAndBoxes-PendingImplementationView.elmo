@@ -1,0 +1,33 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.PendingImplementationView = Elm.DotsAndBoxes.PendingImplementationView || {};
+Elm.DotsAndBoxes.PendingImplementationView.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.PendingImplementationView = _elm.DotsAndBoxes.PendingImplementationView || {};
+   if (_elm.DotsAndBoxes.PendingImplementationView.values) return _elm.DotsAndBoxes.PendingImplementationView.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var separatedList = function (words) {
+      return A3($List.foldr,F2(function (x,y) {    return A2($Basics._op["++"],x,y);}),"",A2($List.intersperse,", ",words));
+   };
+   var pendingImplementationView = function (model) {
+      var playerNames = separatedList(A2($List.map,function (_) {    return _.name;},model.lobby.game.players));
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("modal")]),
+      _U.list([$Html.text(A2($Basics._op["++"],"Not yet implemented: ",$Basics.toString(model.game_id)))
+              ,A2($Html.br,_U.list([]),_U.list([]))
+              ,$Html.text(A2($Basics._op["++"],"Player name: ",A2($Maybe.withDefault,"Not set",model.player_name)))
+              ,A2($Html.br,_U.list([]),_U.list([]))
+              ,$Html.text(A2($Basics._op["++"],"Players present: ",playerNames))]));
+   };
+   return _elm.DotsAndBoxes.PendingImplementationView.values = {_op: _op,pendingImplementationView: pendingImplementationView,separatedList: separatedList};
+};

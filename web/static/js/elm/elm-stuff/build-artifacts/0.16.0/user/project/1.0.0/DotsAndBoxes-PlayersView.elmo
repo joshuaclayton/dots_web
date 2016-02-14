@@ -1,0 +1,26 @@
+Elm.DotsAndBoxes = Elm.DotsAndBoxes || {};
+Elm.DotsAndBoxes.PlayersView = Elm.DotsAndBoxes.PlayersView || {};
+Elm.DotsAndBoxes.PlayersView.make = function (_elm) {
+   "use strict";
+   _elm.DotsAndBoxes = _elm.DotsAndBoxes || {};
+   _elm.DotsAndBoxes.PlayersView = _elm.DotsAndBoxes.PlayersView || {};
+   if (_elm.DotsAndBoxes.PlayersView.values) return _elm.DotsAndBoxes.PlayersView.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var playersList = function (players) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("players-list")]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Players")]))
+              ,A2($Html.ul,_U.list([]),A2($List.map,function (player) {    return A2($Html.li,_U.list([]),_U.list([$Html.text(player.name)]));},players))]));
+   };
+   return _elm.DotsAndBoxes.PlayersView.values = {_op: _op,playersList: playersList};
+};
