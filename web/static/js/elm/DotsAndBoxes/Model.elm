@@ -22,8 +22,13 @@ type alias Player =
   , id: Guid
   }
 
+type alias PlayerScore =
+  { player: Player
+  , score: Int }
+
 type alias Score =
-  { winners: List Player }
+  { winners: List Player
+  , scores: List PlayerScore }
 
 type alias Game =
   { current_player: Player
@@ -53,7 +58,7 @@ nullPlayer : Player
 nullPlayer = { name = "", active = True, id = "" }
 
 nullScore : Score
-nullScore = { winners = [] }
+nullScore = { winners = [], scores = [] }
 
 nullGame : Game
 nullGame = { players = [], current_player = nullPlayer, completed = False, score = nullScore }

@@ -22,7 +22,15 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Player),A2($Json$Decode._op[":="],"name",$Json$Decode.string)),
    A2($Json$Decode._op[":="],"active",$Json$Decode.bool)),
    A2($Json$Decode._op[":="],"id",$Json$Decode.string));
-   var score = A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Score),A2($Json$Decode._op[":="],"winners",$Json$Decode.list(player)));
+   var playerScore = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.PlayerScore),A2($Json$Decode._op[":="],"player",player)),
+   A2($Json$Decode._op[":="],"score",$Json$Decode.$int));
+   var decodeWinners = function (players) {    return $Json$Decode.succeed(A2($Maybe.withDefault,_U.list([]),players));};
+   var score = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   $Json$Decode.succeed($DotsAndBoxes$Model.Score),
+   A2($Json$Decode.andThen,$Json$Decode.maybe(A2($Json$Decode._op[":="],"winners",$Json$Decode.list(player))),decodeWinners)),
+   A2($Json$Decode._op[":="],"scores",$Json$Decode.list(playerScore)));
    var game = A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],

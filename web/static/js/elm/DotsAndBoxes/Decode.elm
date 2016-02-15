@@ -1,9 +1,9 @@
 module DotsAndBoxes.Decode (decodeLobby) where
 
 import Json.Encode as Json
-import Json.Decode exposing (Decoder, null, oneOf, decodeValue, list, succeed, andThen, int, string, bool, (:=))
+import Json.Decode exposing (Decoder, maybe, null, oneOf, decodeValue, list, succeed, andThen, int, string, bool, (:=))
 import Json.Decode.Extra exposing ((|:))
-import DotsAndBoxes.Model exposing (nullLobby, nullPlayer, Lobby, Game, Score, Player, GameStatus)
+import DotsAndBoxes.Model exposing (nullLobby, nullPlayer, Lobby, Game, Score, Player, PlayerScore, GameStatus)
 
 decodeLobby : Json.Value -> Lobby
 decodeLobby payload =
@@ -22,6 +22,10 @@ decodeStatus : String -> Decoder GameStatus
 decodeStatus status =
   succeed (lobbyStatus status)
 
+decodeWinners : Maybe (List Player) -> Decoder (List Player)
+decodeWinners players =
+  succeed (Maybe.withDefault [] players)
+
 player : Decoder Player
 player =
   succeed Player
@@ -29,10 +33,17 @@ player =
     |: ("active" := bool)
     |: ("id" := string)
 
+playerScore : Decoder PlayerScore
+playerScore =
+  succeed PlayerScore
+    |: ("player" := player)
+    |: ("score" := int)
+
 score : Decoder Score
 score =
   succeed Score
-    |: ("winners" := list player)
+    |: ((maybe ("winners" := list player)) `andThen` decodeWinners)
+    |: ("scores" := list playerScore)
 
 game : Decoder Game
 game =
