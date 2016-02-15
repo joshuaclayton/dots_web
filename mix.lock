@@ -2,7 +2,7 @@
   "cowboy": {:hex, :cowboy, "1.0.4"},
   "cowlib": {:hex, :cowlib, "1.0.2"},
   "decimal": {:hex, :decimal, "1.1.0"},
-  "dots": {:git, "https://github.com/joshuaclayton/dots.git", "81166c8cc3e8567e2a9d1d0c82ead2b6363adeb1", []},
+  "dots": {:git, "https://github.com/joshuaclayton/dots.git", "9f915c332ead443cad020dbf2319a0381933f64b", []},
   "ecto": {:hex, :ecto, "1.1.0"},
   "fs": {:hex, :fs, "0.9.2"},
   "phoenix": {:hex, :phoenix, "1.1.0"},
