@@ -10,6 +10,10 @@
     game.ports.setGameId.send(<%= @game_id %>);
     game.ports.setPlayerGuid.send(Guid.findOrCreate());
 
+    window.onbeforeunload = function() {
+      channel.push("player:leave", { game_id: <%= @game_id %>, player: Guid.findOrCreate() });
+    };
+
     game.ports.broadcastUpdates.subscribe(function(data) {
       var clonedData = Object.assign({}, JSON.parse(data));
       var action = clonedData.action;
