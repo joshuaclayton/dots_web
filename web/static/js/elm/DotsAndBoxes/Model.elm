@@ -22,9 +22,14 @@ type alias Player =
   , id: Guid
   }
 
+type alias Score =
+  { winners: List Player }
+
 type alias Game =
   { current_player: Player
   , players: List Player
+  , completed: Bool
+  , score: Score
   }
 
 type alias Lobby =
@@ -47,8 +52,11 @@ type alias Model =
 nullPlayer : Player
 nullPlayer = { name = "", active = True, id = "" }
 
+nullScore : Score
+nullScore = { winners = [] }
+
 nullGame : Game
-nullGame = { players = [], current_player = nullPlayer }
+nullGame = { players = [], current_player = nullPlayer, completed = False, score = nullScore }
 
 nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }

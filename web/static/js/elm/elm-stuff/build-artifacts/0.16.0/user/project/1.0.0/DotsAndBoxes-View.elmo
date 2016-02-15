@@ -13,6 +13,7 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    $DotsAndBoxes$PendingImplementationView = Elm.DotsAndBoxes.PendingImplementationView.make(_elm),
    $DotsAndBoxes$PlayersView = Elm.DotsAndBoxes.PlayersView.make(_elm),
    $DotsAndBoxes$RegistrationView = Elm.DotsAndBoxes.RegistrationView.make(_elm),
+   $DotsAndBoxes$ScoreView = Elm.DotsAndBoxes.ScoreView.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
@@ -34,6 +35,9 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
       _U.list([$Html$Attributes.$class("modal")]),
       _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players),startGameForm(address)]));
    });
+   var startedView = F2(function (address,model) {
+      return model.lobby.game.completed ? $DotsAndBoxes$ScoreView.scoreView(model.lobby.game.score) : $DotsAndBoxes$PendingImplementationView.pendingImplementationView(model);
+   });
    var notStartedView = F2(function (address,model) {
       var _p0 = model.player;
       if (_p0.ctor === "Nothing") {
@@ -50,12 +54,13 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
       switch (_p1.ctor)
       {case "Unknown": return loadingView;
          case "NotStarted": return A2(notStartedView,address,model);
-         default: return $DotsAndBoxes$PendingImplementationView.pendingImplementationView(model);}
+         default: return A2(startedView,address,model);}
    });
    return _elm.DotsAndBoxes.View.values = {_op: _op
                                           ,mainView: mainView
                                           ,loadingView: loadingView
                                           ,notStartedView: notStartedView
+                                          ,startedView: startedView
                                           ,waitingForOtherPlayersView: waitingForOtherPlayersView
                                           ,startGameForm: startGameForm};
 };

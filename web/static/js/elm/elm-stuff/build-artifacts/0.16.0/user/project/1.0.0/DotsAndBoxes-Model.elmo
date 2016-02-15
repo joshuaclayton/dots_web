@@ -14,11 +14,13 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var nullScore = {winners: _U.list([])};
    var nullPlayer = {name: "",active: true,id: ""};
-   var nullGame = {players: _U.list([]),current_player: nullPlayer};
+   var nullGame = {players: _U.list([]),current_player: nullPlayer,completed: false,score: nullScore};
    var Model = F7(function (a,b,c,d,e,f,g) {    return {lobby: a,game_id: b,player_name: c,board_size: d,last_action: e,player: f,player_guid: g};});
    var Lobby = F4(function (a,b,c,d) {    return {width: a,height: b,status: c,game: d};});
-   var Game = F2(function (a,b) {    return {current_player: a,players: b};});
+   var Game = F4(function (a,b,c,d) {    return {current_player: a,players: b,completed: c,score: d};});
+   var Score = function (a) {    return {winners: a};};
    var Player = F3(function (a,b,c) {    return {name: a,active: b,id: c};});
    var StartGame = {ctor: "StartGame"};
    var SignUp = {ctor: "SignUp"};
@@ -46,10 +48,12 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
                                            ,SignUp: SignUp
                                            ,StartGame: StartGame
                                            ,Player: Player
+                                           ,Score: Score
                                            ,Game: Game
                                            ,Lobby: Lobby
                                            ,Model: Model
                                            ,nullPlayer: nullPlayer
+                                           ,nullScore: nullScore
                                            ,nullGame: nullGame
                                            ,nullLobby: nullLobby
                                            ,nullModel: nullModel};

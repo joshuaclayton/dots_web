@@ -22,11 +22,16 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Player),A2($Json$Decode._op[":="],"name",$Json$Decode.string)),
    A2($Json$Decode._op[":="],"active",$Json$Decode.bool)),
    A2($Json$Decode._op[":="],"id",$Json$Decode.string));
+   var score = A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Score),A2($Json$Decode._op[":="],"winners",$Json$Decode.list(player)));
    var game = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    $Json$Decode.succeed($DotsAndBoxes$Model.Game),
    A2($Json$Decode._op[":="],"current_player",$Json$Decode.oneOf(_U.list([player,$Json$Decode.$null($DotsAndBoxes$Model.nullPlayer)])))),
-   A2($Json$Decode._op[":="],"players",$Json$Decode.list(player)));
+   A2($Json$Decode._op[":="],"players",$Json$Decode.list(player))),
+   A2($Json$Decode._op[":="],"completed",$Json$Decode.bool)),
+   A2($Json$Decode._op[":="],"score",score));
    var lobbyStatus = function (status) {
       var _p0 = status;
       switch (_p0)

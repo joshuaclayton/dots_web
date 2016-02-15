@@ -6,6 +6,7 @@ import Signal exposing (Address)
 import DotsAndBoxes.Model exposing (Action, Model)
 import DotsAndBoxes.RegistrationView exposing (registrationView)
 import DotsAndBoxes.PendingImplementationView exposing (pendingImplementationView)
+import DotsAndBoxes.ScoreView exposing (scoreView)
 import DotsAndBoxes.PlayersView exposing (playersList)
 import DotsAndBoxes.CustomEvent exposing (onSubmit)
 
@@ -14,7 +15,7 @@ mainView address model =
   case model.lobby.status of
     DotsAndBoxes.Model.Unknown -> loadingView
     DotsAndBoxes.Model.NotStarted -> notStartedView address model
-    _ -> pendingImplementationView model
+    DotsAndBoxes.Model.Started -> startedView address model
 
 loadingView : Html
 loadingView =
@@ -27,6 +28,10 @@ notStartedView address model =
   case model.player of
     Nothing -> registrationView address model
     _ -> waitingForOtherPlayersView address model
+
+startedView : Address Action -> Model -> Html
+startedView address model =
+  if model.lobby.game.completed then scoreView model.lobby.game.score else pendingImplementationView model
 
 waitingForOtherPlayersView : Address Action -> Model -> Html
 waitingForOtherPlayersView address model =
