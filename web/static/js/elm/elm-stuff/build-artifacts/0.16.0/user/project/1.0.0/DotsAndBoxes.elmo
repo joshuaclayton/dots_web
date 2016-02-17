@@ -53,16 +53,11 @@ Elm.DotsAndBoxes.make = function (_elm) {
                                                               ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:start")}]));
          default: return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}]));}
    };
-   var updateableAction = function (model) {
-      var _p1 = model.last_action;
-      switch (_p1.ctor)
-      {case "SignUp": return true;
-         case "StartGame": return true;
-         default: return false;}
-   };
+   var updateableActions = _U.list([$DotsAndBoxes$Model.SignUp,$DotsAndBoxes$Model.StartGame]);
+   var isUpdateableAction = function (model) {    return A2($List.member,model.last_action,updateableActions);};
    var inputs = $Signal.mergeMany(A2($Basics._op["++"],_U.list([actions.signal]),inboundPorts));
    var model = A3($Signal.foldp,$DotsAndBoxes$Update.update,$DotsAndBoxes$Model.nullModel,inputs);
-   var outboundModel = A3($Signal.filter,updateableAction,$DotsAndBoxes$Model.nullModel,model);
+   var outboundModel = A3($Signal.filter,isUpdateableAction,$DotsAndBoxes$Model.nullModel,model);
    var outboundActionsPayload = A2($Signal.map,toPayloadValue,outboundModel);
    var broadcastUpdates = Elm.Native.Port.make(_elm).outboundSignal("broadcastUpdates",
    function (v) {
@@ -78,7 +73,8 @@ Elm.DotsAndBoxes.make = function (_elm) {
    return _elm.DotsAndBoxes.values = {_op: _op
                                      ,model: model
                                      ,inputs: inputs
-                                     ,updateableAction: updateableAction
+                                     ,updateableActions: updateableActions
+                                     ,isUpdateableAction: isUpdateableAction
                                      ,outboundModel: outboundModel
                                      ,toPayloadValue: toPayloadValue
                                      ,outboundActionsPayload: outboundActionsPayload

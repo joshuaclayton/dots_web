@@ -13,16 +13,19 @@ inputs : Signal Action
 inputs =
   Signal.mergeMany ([actions.signal] ++ inboundPorts)
 
-updateableAction : Model -> Bool
-updateableAction model =
-  case model.last_action of
-    DotsAndBoxes.Model.SignUp -> True
-    DotsAndBoxes.Model.StartGame -> True
-    _ -> False
+updateableActions : List Action
+updateableActions =
+  [ DotsAndBoxes.Model.SignUp
+  , DotsAndBoxes.Model.StartGame
+  ]
+
+isUpdateableAction : Model -> Bool
+isUpdateableAction model =
+  List.member model.last_action updateableActions
 
 outboundModel : Signal Model
 outboundModel =
-  Signal.filter updateableAction nullModel model
+  Signal.filter isUpdateableAction nullModel model
 
 toPayloadValue : Model -> Json.Value
 toPayloadValue model =
