@@ -32,6 +32,11 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
    var UpdateGameId = function (a) {    return {ctor: "UpdateGameId",_0: a};};
    var NoOp = {ctor: "NoOp"};
    var Started = {ctor: "Started"};
+   var isCurrentPlayer = function (model) {
+      var currentPlayer = model.lobby.game.current_player;
+      var thisPlayer = A2($Maybe.withDefault,nullPlayer,model.player);
+      return _U.eq(thisPlayer.id,currentPlayer.id) && _U.eq(model.lobby.status,Started);
+   };
    var NotStarted = {ctor: "NotStarted"};
    var Unknown = {ctor: "Unknown"};
    var nullLobby = {width: 0,height: 0,status: Unknown,game: nullGame};
@@ -54,6 +59,7 @@ Elm.DotsAndBoxes.Model.make = function (_elm) {
                                            ,Game: Game
                                            ,Lobby: Lobby
                                            ,Model: Model
+                                           ,isCurrentPlayer: isCurrentPlayer
                                            ,nullPlayer: nullPlayer
                                            ,nullScore: nullScore
                                            ,nullGame: nullGame

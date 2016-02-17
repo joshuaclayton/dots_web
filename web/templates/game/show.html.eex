@@ -22,6 +22,12 @@
       channel.push(action, clonedData);
     });
 
+    game.ports.broadcastIsCurrentPlayer.subscribe(function(isCurrentPlayer) {
+      if (isCurrentPlayer && document.hidden) {
+        Notifier.notify("Dots and Boxes", "It's your turn!");
+      }
+    });
+
     window.channel.on("game:update:<%= @game_id %>", function(payload) {
       console.log('receiving payload', payload);
       game.ports.setState.send(payload.lobby);

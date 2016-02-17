@@ -8,9 +8,9 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$BoardView = Elm.DotsAndBoxes.BoardView.make(_elm),
    $DotsAndBoxes$CustomEvent = Elm.DotsAndBoxes.CustomEvent.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
-   $DotsAndBoxes$PendingImplementationView = Elm.DotsAndBoxes.PendingImplementationView.make(_elm),
    $DotsAndBoxes$PlayersView = Elm.DotsAndBoxes.PlayersView.make(_elm),
    $DotsAndBoxes$RegistrationView = Elm.DotsAndBoxes.RegistrationView.make(_elm),
    $DotsAndBoxes$ScoreView = Elm.DotsAndBoxes.ScoreView.make(_elm),
@@ -36,11 +36,16 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
       _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players),startGameForm(address)]));
    });
    var startedView = F2(function (address,model) {
-      return model.lobby.game.completed ? $DotsAndBoxes$ScoreView.scoreView(model.lobby.game.score) : $DotsAndBoxes$PendingImplementationView.pendingImplementationView(model);
+      var _p0 = model.lobby.game.completed;
+      if (_p0 === true) {
+            return $DotsAndBoxes$ScoreView.scoreView(model.lobby.game.score);
+         } else {
+            return A2($DotsAndBoxes$BoardView.board,address,model);
+         }
    });
    var notStartedView = F2(function (address,model) {
-      var _p0 = model.player;
-      if (_p0.ctor === "Nothing") {
+      var _p1 = model.player;
+      if (_p1.ctor === "Nothing") {
             return A2($DotsAndBoxes$RegistrationView.registrationView,address,model);
          } else {
             return A2(waitingForOtherPlayersView,address,model);
@@ -50,8 +55,8 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    _U.list([$Html$Attributes.$class("modal loading")]),
    _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("Loading the game...")]))]));
    var mainView = F2(function (address,model) {
-      var _p1 = model.lobby.status;
-      switch (_p1.ctor)
+      var _p2 = model.lobby.status;
+      switch (_p2.ctor)
       {case "Unknown": return loadingView;
          case "NotStarted": return A2(notStartedView,address,model);
          default: return A2(startedView,address,model);}

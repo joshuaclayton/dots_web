@@ -69,6 +69,11 @@ Elm.DotsAndBoxes.make = function (_elm) {
    },
    $Signal.map($Json$Encode.encode(0))(outboundActionsPayload));
    var main = A2($Signal.map,$DotsAndBoxes$View.mainView(actions.address),model);
+   var broadcastIsCurrentPlayer = Elm.Native.Port.make(_elm).outboundSignal("broadcastIsCurrentPlayer",
+   function (v) {
+      return v;
+   },
+   $Signal.dropRepeats(A2($Signal.map,$DotsAndBoxes$Model.isCurrentPlayer,model)));
    return _elm.DotsAndBoxes.values = {_op: _op
                                      ,model: model
                                      ,inputs: inputs

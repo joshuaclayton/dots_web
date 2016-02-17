@@ -29,6 +29,9 @@ window.Elm = Elm;
 import Guid from "./guid"
 window.Guid = Guid;
 
+import Notifier from "./notifier"
+window.Notifier = Notifier;
+
 let channel = socket.channel("game", {});
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })

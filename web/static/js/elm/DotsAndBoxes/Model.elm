@@ -54,6 +54,13 @@ type alias Model =
   , player_guid: Guid
   }
 
+isCurrentPlayer : Model -> Bool
+isCurrentPlayer model =
+  let thisPlayer = Maybe.withDefault nullPlayer model.player
+      currentPlayer = model.lobby.game.current_player
+  in
+    thisPlayer.id == currentPlayer.id && model.lobby.status == Started
+
 nullPlayer : Player
 nullPlayer = { name = "", active = True, id = "" }
 

@@ -1,6 +1,6 @@
 module DotsAndBoxes where
 
-import DotsAndBoxes.Model exposing (nullModel, Model, Action, Guid)
+import DotsAndBoxes.Model exposing (nullModel, nullPlayer, isCurrentPlayer, Model, Action, Guid)
 import DotsAndBoxes.View exposing (mainView)
 import DotsAndBoxes.Update exposing (update)
 import Html exposing (Html)
@@ -77,3 +77,7 @@ port setState : Signal Json.Value
 port broadcastUpdates : Signal String
 port broadcastUpdates =
   (Signal.map <| Json.encode 0) outboundActionsPayload
+
+port broadcastIsCurrentPlayer : Signal Bool
+port broadcastIsCurrentPlayer =
+  (Signal.map isCurrentPlayer model) |> Signal.dropRepeats
