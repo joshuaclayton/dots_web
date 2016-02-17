@@ -9,6 +9,7 @@ Elm.DotsAndBoxes.make = function (_elm) {
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $DotsAndBoxes$Update = Elm.DotsAndBoxes.Update.make(_elm),
    $DotsAndBoxes$View = Elm.DotsAndBoxes.View.make(_elm),
+   $DotsAndBoxes$WebSocketsPush = Elm.DotsAndBoxes.WebSocketsPush.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Json$Encode = Elm.Json.Encode.make(_elm),
    $List = Elm.List.make(_elm),
@@ -32,33 +33,12 @@ Elm.DotsAndBoxes.make = function (_elm) {
                               ,A2(fromPort,$DotsAndBoxes$Model.UpdateGameState,setState)
                               ,A2(fromPort,$DotsAndBoxes$Model.UpdatePlayerGuid,setPlayerGuid)]);
    var actions = $Signal.mailbox($DotsAndBoxes$Model.NoOp);
-   var toPayloadValue = function (model) {
-      var _p0 = model.last_action;
-      switch (_p0.ctor)
-      {case "SignUp": return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}
-                                                         ,{ctor: "_Tuple2",_0: "width",_1: $Json$Encode.$int(model.board_size)}
-                                                         ,{ctor: "_Tuple2",_0: "height",_1: $Json$Encode.$int(model.board_size)}
-                                                         ,{ctor: "_Tuple2"
-                                                          ,_0: "player"
-                                                          ,_1: $Json$Encode.object(_U.list([{ctor: "_Tuple2"
-                                                                                            ,_0: "name"
-                                                                                            ,_1: $Json$Encode.string(A2($Maybe.withDefault,
-                                                                                            "Unknown",
-                                                                                            model.player_name))}
-                                                                                           ,{ctor: "_Tuple2"
-                                                                                            ,_0: "id"
-                                                                                            ,_1: $Json$Encode.string(model.player_guid)}]))}
-                                                         ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:begin")}]));
-         case "StartGame": return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}
-                                                              ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:start")}]));
-         default: return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}]));}
-   };
    var updateableActions = _U.list([$DotsAndBoxes$Model.SignUp,$DotsAndBoxes$Model.StartGame]);
    var isUpdateableAction = function (model) {    return A2($List.member,model.last_action,updateableActions);};
    var inputs = $Signal.mergeMany(A2($Basics._op["++"],_U.list([actions.signal]),inboundPorts));
    var model = A3($Signal.foldp,$DotsAndBoxes$Update.update,$DotsAndBoxes$Model.nullModel,inputs);
    var outboundModel = A3($Signal.filter,isUpdateableAction,$DotsAndBoxes$Model.nullModel,model);
-   var outboundActionsPayload = A2($Signal.map,toPayloadValue,outboundModel);
+   var outboundActionsPayload = A2($Signal.map,$DotsAndBoxes$WebSocketsPush.modelToWebSocketsPayload,outboundModel);
    var broadcastUpdates = Elm.Native.Port.make(_elm).outboundSignal("broadcastUpdates",
    function (v) {
       return v;
@@ -76,7 +56,6 @@ Elm.DotsAndBoxes.make = function (_elm) {
                                      ,updateableActions: updateableActions
                                      ,isUpdateableAction: isUpdateableAction
                                      ,outboundModel: outboundModel
-                                     ,toPayloadValue: toPayloadValue
                                      ,outboundActionsPayload: outboundActionsPayload
                                      ,actions: actions
                                      ,inboundPorts: inboundPorts

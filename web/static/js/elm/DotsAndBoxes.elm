@@ -3,8 +3,9 @@ module DotsAndBoxes where
 import DotsAndBoxes.Model exposing (nullModel, nullPlayer, isCurrentPlayer, Model, Action, Guid)
 import DotsAndBoxes.View exposing (mainView)
 import DotsAndBoxes.Update exposing (update)
+import DotsAndBoxes.WebSocketsPush exposing (modelToWebSocketsPayload)
 import Html exposing (Html)
-import Json.Encode as Json exposing (object, string, int)
+import Json.Encode as Json
 
 model : Signal Model
 model = Signal.foldp update nullModel inputs
@@ -27,27 +28,9 @@ outboundModel : Signal Model
 outboundModel =
   Signal.filter isUpdateableAction nullModel model
 
-toPayloadValue : Model -> Json.Value
-toPayloadValue model =
-  case model.last_action of
-    DotsAndBoxes.Model.SignUp ->
-      object [ ("game_id", int model.game_id)
-      , ("width", int model.board_size)
-      , ("height", int model.board_size)
-      , ("player", object [("name", string(Maybe.withDefault "Unknown" model.player_name)), ("id", string model.player_guid)])
-      , ("action", string "game:begin")
-      ]
-    DotsAndBoxes.Model.StartGame ->
-      object [ ("game_id", int model.game_id)
-      , ("action", string "game:start")
-      ]
-    _ ->
-      object
-        [ ("game_id", int model.game_id) ]
-
 outboundActionsPayload : Signal Json.Value
 outboundActionsPayload =
-  Signal.map toPayloadValue outboundModel
+  Signal.map modelToWebSocketsPayload outboundModel
 
 actions : Signal.Mailbox Action
 actions =
