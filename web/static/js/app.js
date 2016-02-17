@@ -23,14 +23,8 @@ import socket from "./socket"
 import Game from "./components/game"
 window.Game = Game;
 
-import Elm from "./elm/DotsAndBoxes"
-window.Elm = Elm;
-
-import Guid from "./guid"
-window.Guid = Guid;
-
-import Notifier from "./notifier"
-window.Notifier = Notifier;
+import ElmRunner from "./elm_runner";
+window.ElmRunner = ElmRunner;
 
 let channel = socket.channel("game", {});
 channel.join()
