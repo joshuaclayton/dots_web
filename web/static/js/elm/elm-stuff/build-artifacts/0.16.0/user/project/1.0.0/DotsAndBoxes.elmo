@@ -33,8 +33,14 @@ Elm.DotsAndBoxes.make = function (_elm) {
                               ,A2(fromPort,$DotsAndBoxes$Model.UpdateGameState,setState)
                               ,A2(fromPort,$DotsAndBoxes$Model.UpdatePlayerGuid,setPlayerGuid)]);
    var actions = $Signal.mailbox($DotsAndBoxes$Model.NoOp);
-   var updateableActions = _U.list([$DotsAndBoxes$Model.SignUp,$DotsAndBoxes$Model.StartGame]);
-   var isUpdateableAction = function (model) {    return A2($List.member,model.last_action,updateableActions);};
+   var isUpdateableAction = function (model) {
+      var _p0 = model.last_action;
+      switch (_p0.ctor)
+      {case "SignUp": return true;
+         case "StartGame": return true;
+         case "ClaimSide": return true;
+         default: return false;}
+   };
    var inputs = $Signal.mergeMany(A2($Basics._op["++"],_U.list([actions.signal]),inboundPorts));
    var model = A3($Signal.foldp,$DotsAndBoxes$Update.update,$DotsAndBoxes$Model.nullModel,inputs);
    var outboundModel = A3($Signal.filter,isUpdateableAction,$DotsAndBoxes$Model.nullModel,model);
@@ -53,7 +59,6 @@ Elm.DotsAndBoxes.make = function (_elm) {
    return _elm.DotsAndBoxes.values = {_op: _op
                                      ,model: model
                                      ,inputs: inputs
-                                     ,updateableActions: updateableActions
                                      ,isUpdateableAction: isUpdateableAction
                                      ,outboundModel: outboundModel
                                      ,outboundActionsPayload: outboundActionsPayload

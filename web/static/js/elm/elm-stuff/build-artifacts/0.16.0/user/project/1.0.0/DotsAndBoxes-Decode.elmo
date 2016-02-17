@@ -17,6 +17,9 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var coordinate = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Coordinate),A2($Json$Decode._op[":="],"x",$Json$Decode.$int)),
+   A2($Json$Decode._op[":="],"y",$Json$Decode.$int));
    var player = A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Player),A2($Json$Decode._op[":="],"name",$Json$Decode.string)),
@@ -31,7 +34,29 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    $Json$Decode.succeed($DotsAndBoxes$Model.Score),
    A2($Json$Decode.andThen,$Json$Decode.maybe(A2($Json$Decode._op[":="],"winners",$Json$Decode.list(player))),decodeWinners)),
    A2($Json$Decode._op[":="],"scores",$Json$Decode.list(playerScore)));
+   var sidePosition = function (position) {
+      var _p0 = position;
+      switch (_p0)
+      {case "Top": return $DotsAndBoxes$Model.Top;
+         case "Right": return $DotsAndBoxes$Model.Right;
+         case "Bottom": return $DotsAndBoxes$Model.Bottom;
+         case "Left": return $DotsAndBoxes$Model.Left;
+         default: return $DotsAndBoxes$Model.UnknownSide;}
+   };
+   var decodePosition = function (position) {    return $Json$Decode.succeed(sidePosition(position));};
+   var claim = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   $Json$Decode.succeed($DotsAndBoxes$Model.Claim),
+   A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"position",$Json$Decode.string),decodePosition)),
+   A2($Json$Decode._op[":="],"player",player));
+   var square = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Square),A2($Json$Decode._op[":="],"completed_by",$Json$Decode.maybe(player))),
+   A2($Json$Decode._op[":="],"coordinates",coordinate)),
+   A2($Json$Decode._op[":="],"claims",$Json$Decode.list(claim)));
+   var board = A2($Json$Decode$Extra._op["|:"],$Json$Decode.succeed($DotsAndBoxes$Model.Board),A2($Json$Decode._op[":="],"squares",$Json$Decode.list(square)));
    var game = A2($Json$Decode$Extra._op["|:"],
+   A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
    A2($Json$Decode$Extra._op["|:"],
@@ -39,10 +64,11 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    A2($Json$Decode._op[":="],"current_player",$Json$Decode.oneOf(_U.list([player,$Json$Decode.$null($DotsAndBoxes$Model.nullPlayer)])))),
    A2($Json$Decode._op[":="],"players",$Json$Decode.list(player))),
    A2($Json$Decode._op[":="],"completed",$Json$Decode.bool)),
-   A2($Json$Decode._op[":="],"score",score));
+   A2($Json$Decode._op[":="],"score",score)),
+   A2($Json$Decode._op[":="],"board",$Json$Decode.maybe(board)));
    var lobbyStatus = function (status) {
-      var _p0 = status;
-      switch (_p0)
+      var _p1 = status;
+      switch (_p1)
       {case "not_started": return $DotsAndBoxes$Model.NotStarted;
          case "started": return $DotsAndBoxes$Model.Started;
          default: return $DotsAndBoxes$Model.Unknown;}
@@ -56,8 +82,12 @@ Elm.DotsAndBoxes.Decode.make = function (_elm) {
    A2($Json$Decode.andThen,A2($Json$Decode._op[":="],"status",$Json$Decode.string),decodeStatus)),
    A2($Json$Decode._op[":="],"game",game));
    var decodeLobby = function (payload) {
-      var decodedLobby = A2($Json$Decode.decodeValue,lobby,payload);
-      return A2($Result.withDefault,$DotsAndBoxes$Model.nullLobby,decodedLobby);
+      var _p2 = A2($Json$Decode.decodeValue,lobby,payload);
+      if (_p2.ctor === "Ok") {
+            return _p2._0;
+         } else {
+            return $DotsAndBoxes$Model.nullLobby;
+         }
    };
    return _elm.DotsAndBoxes.Decode.values = {_op: _op,decodeLobby: decodeLobby};
 };

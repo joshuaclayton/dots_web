@@ -31,6 +31,7 @@ Elm.DotsAndBoxes.Update.make = function (_elm) {
               }
          case "SignUp": return _U.update(modelWithAction,{player: $Maybe.Just(newPlayer)});
          case "ChooseSize": return _U.update(modelWithAction,{board_size: _p0._0});
+         case "StartGame": return modelWithAction;
          default: return modelWithAction;}
    });
    return _elm.DotsAndBoxes.Update.values = {_op: _op,update: update};

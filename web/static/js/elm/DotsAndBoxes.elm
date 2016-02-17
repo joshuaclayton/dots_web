@@ -14,15 +14,13 @@ inputs : Signal Action
 inputs =
   Signal.mergeMany ([actions.signal] ++ inboundPorts)
 
-updateableActions : List Action
-updateableActions =
-  [ DotsAndBoxes.Model.SignUp
-  , DotsAndBoxes.Model.StartGame
-  ]
-
 isUpdateableAction : Model -> Bool
 isUpdateableAction model =
-  List.member model.last_action updateableActions
+  case model.last_action of
+    DotsAndBoxes.Model.SignUp -> True
+    DotsAndBoxes.Model.StartGame -> True
+    DotsAndBoxes.Model.ClaimSide square side -> True
+    _ -> False
 
 outboundModel : Signal Model
 outboundModel =

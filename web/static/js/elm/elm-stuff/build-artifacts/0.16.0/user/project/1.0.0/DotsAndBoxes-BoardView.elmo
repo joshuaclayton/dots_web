@@ -8,8 +8,10 @@ Elm.DotsAndBoxes.BoardView.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $DotsAndBoxes$ListExtras = Elm.DotsAndBoxes.ListExtras.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $DotsAndBoxes$PlayersView = Elm.DotsAndBoxes.PlayersView.make(_elm),
+   $DotsAndBoxes$SquareView = Elm.DotsAndBoxes.SquareView.make(_elm),
    $DotsAndBoxes$TurnDesignatorView = Elm.DotsAndBoxes.TurnDesignatorView.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
@@ -18,10 +20,24 @@ Elm.DotsAndBoxes.BoardView.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var squaresGroups = function (squares) {
+      return $List.reverse($DotsAndBoxes$ListExtras.values(A2($DotsAndBoxes$ListExtras.groupBy,function (square) {    return square.coordinates.y;},squares)));
+   };
+   var squaresRow = F3(function (address,model,squares) {
+      return A2($Html.div,_U.list([$Html$Attributes.$class("square-row")]),A2($List.map,A2($DotsAndBoxes$SquareView.square,address,model),squares));
+   });
+   var board$ = F2(function (address,model) {
+      var board = A2($Maybe.withDefault,$DotsAndBoxes$Model.nullBoard,model.lobby.game.board);
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("board")]),
+      _U.list([A2($Html.div,_U.list([]),A2($List.map,A2(squaresRow,address,model),squaresGroups(board.squares)))]));
+   });
    var board = F2(function (address,model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("full-board")]),
-      _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players),$DotsAndBoxes$TurnDesignatorView.turnDesignator(model)]));
+      _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players)
+              ,$DotsAndBoxes$TurnDesignatorView.turnDesignator(model)
+              ,A2(board$,address,model)]));
    });
    return _elm.DotsAndBoxes.BoardView.values = {_op: _op,board: board};
 };

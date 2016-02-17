@@ -18,3 +18,5 @@ update action model =
     DotsAndBoxes.Model.SignUp -> { modelWithAction | player = Just newPlayer }
     DotsAndBoxes.Model.ChooseSize board_size -> { modelWithAction | board_size = board_size }
     DotsAndBoxes.Model.StartGame -> modelWithAction
+    DotsAndBoxes.Model.ClaimSide square side -> modelWithAction
+

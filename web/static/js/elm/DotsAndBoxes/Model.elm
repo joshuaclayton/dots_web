@@ -13,6 +13,9 @@ type Action
   | ChooseSize Int
   | SignUp
   | StartGame
+  | ClaimSide Square SquareSide
+
+type SquareSide = Top | Right | Bottom | Left | UnknownSide
 
 type alias Guid = String
 
@@ -30,11 +33,32 @@ type alias Score =
   { winners: List Player
   , scores: List PlayerScore }
 
+type alias Claim =
+  { position: SquareSide
+  , player: Player
+  }
+
+type alias Coordinate =
+  { x: Int
+  , y: Int
+  }
+
+type alias Square =
+  { completed_by: Maybe Player
+  , coordinates: Coordinate
+  , claims: List Claim
+  }
+
+type alias Board =
+  { squares: List Square
+  }
+
 type alias Game =
   { current_player: Player
   , players: List Player
   , completed: Bool
   , score: Score
+  , board: Maybe Board
   }
 
 type alias Lobby =
@@ -67,8 +91,11 @@ nullPlayer = { name = "", active = True, id = "" }
 nullScore : Score
 nullScore = { winners = [], scores = [] }
 
+nullBoard : Board
+nullBoard = { squares = [] }
+
 nullGame : Game
-nullGame = { players = [], current_player = nullPlayer, completed = False, score = nullScore }
+nullGame = { players = [], current_player = nullPlayer, completed = False, score = nullScore, board = Nothing }
 
 nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }
