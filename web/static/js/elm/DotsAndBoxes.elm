@@ -11,12 +11,7 @@ model = Signal.foldp update nullModel inputs
 
 inputs : Signal Action
 inputs =
-  Signal.mergeMany
-  [ actions.signal
-  , updateGameId
-  , updateGameState
-  , updatePlayerGuid
-  ]
+  Signal.mergeMany ([actions.signal] ++ inboundPorts)
 
 updateableAction : Model -> Bool
 updateableAction model =
@@ -55,17 +50,16 @@ actions : Signal.Mailbox Action
 actions =
   Signal.mailbox DotsAndBoxes.Model.NoOp
 
-updateGameId : Signal Action
-updateGameId =
-  (Signal.map <| DotsAndBoxes.Model.UpdateGameId) setGameId
+inboundPorts : List (Signal Action)
+inboundPorts =
+  [ DotsAndBoxes.Model.UpdateGameId `fromPort` setGameId
+  , DotsAndBoxes.Model.UpdateGameState `fromPort` setState
+  , DotsAndBoxes.Model.UpdatePlayerGuid `fromPort` setPlayerGuid
+  ]
 
-updateGameState : Signal Action
-updateGameState =
-  (Signal.map <| DotsAndBoxes.Model.UpdateGameState) setState
-
-updatePlayerGuid : Signal Action
-updatePlayerGuid =
-  (Signal.map <| DotsAndBoxes.Model.UpdatePlayerGuid) setPlayerGuid
+fromPort : (a -> b) -> Signal a -> Signal b
+fromPort action inboundPort =
+  (Signal.map <| action) inboundPort
 
 main : Signal Html
 main = Signal.map (mainView actions.address) model
