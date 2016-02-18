@@ -1,0 +1,17 @@
+Elm.Hash = Elm.Hash || {};
+Elm.Hash.make = function (_elm) {
+   "use strict";
+   _elm.Hash = _elm.Hash || {};
+   if (_elm.Hash.values) return _elm.Hash.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Native$Hash = Elm.Native.Hash.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var md5 = function (name) {    return $Native$Hash.md5(name);};
+   return _elm.Hash.values = {_op: _op,md5: md5};
+};

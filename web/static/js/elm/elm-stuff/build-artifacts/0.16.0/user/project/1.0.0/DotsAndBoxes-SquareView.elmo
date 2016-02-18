@@ -9,13 +9,15 @@ Elm.DotsAndBoxes.SquareView.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
+   $Hash = Elm.Hash.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm);
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
    var _op = {};
    var sideToString = function (side) {
       var _p0 = side;
@@ -44,8 +46,26 @@ Elm.DotsAndBoxes.SquareView.make = function (_elm) {
               ,A2($Html$Events.onClick,address,A3(actionBasedOnTurn,model,square,side))]),
       _U.list([]));
    });
+   var playerColor = function (player) {
+      var _p2 = player;
+      if (_p2.ctor === "Just") {
+            return $Maybe.Just(A3($String.slice,0,6,$Hash.md5(_p2._0.id)));
+         } else {
+            return $Maybe.Nothing;
+         }
+   };
+   var squareStyle = function (player) {
+      var _p3 = playerColor(player);
+      if (_p3.ctor === "Just") {
+            return $Html$Attributes.style(_U.list([{ctor: "_Tuple2",_0: "backgroundColor",_1: A2($Basics._op["++"],"#",_p3._0)}]));
+         } else {
+            return $Html$Attributes.style(_U.list([]));
+         }
+   };
    var square = F3(function (address,model,square$) {
-      return A2($Html.ul,_U.list([$Html$Attributes.$class("square")]),A2($List.map,A3(squareSide,address,model,square$),sides));
+      return A2($Html.ul,
+      _U.list([$Html$Attributes.$class("square"),squareStyle(square$.completed_by)]),
+      A2($List.map,A3(squareSide,address,model,square$),sides));
    });
    return _elm.DotsAndBoxes.SquareView.values = {_op: _op,square: square};
 };
