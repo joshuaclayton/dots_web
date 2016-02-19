@@ -22,6 +22,7 @@ Elm.DotsAndBoxes.ListExtras.make = function (_elm) {
       },
       uniqueValues);
    });
+   var detect = F2(function (filter,list) {    return $List.head(A2($List.filter,filter,list));});
    var values = function (groupedList) {    return A2($List.map,function (_p0) {    var _p1 = _p0;return _p1._1;},groupedList);};
-   return _elm.DotsAndBoxes.ListExtras.values = {_op: _op,values: values,groupBy: groupBy};
+   return _elm.DotsAndBoxes.ListExtras.values = {_op: _op,values: values,groupBy: groupBy,detect: detect};
 };

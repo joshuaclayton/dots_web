@@ -49,6 +49,9 @@ Elm.DotsAndBoxes.WebSocketsPush.make = function (_elm) {
                                               ,{ctor: "_Tuple2",_0: "y",_1: $Json$Encode.$int(_p2.coordinates.y)}
                                               ,{ctor: "_Tuple2",_0: "position",_1: $Json$Encode.string(sideToString(_p1._1))}
                                               ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("game:claim")}]));
+         case "UpdatePlayerGuid": return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}
+                                                                     ,{ctor: "_Tuple2",_0: "player",_1: $Json$Encode.string(_p1._0)}
+                                                                     ,{ctor: "_Tuple2",_0: "action",_1: $Json$Encode.string("player:rejoin")}]));
          default: return $Json$Encode.object(_U.list([{ctor: "_Tuple2",_0: "game_id",_1: $Json$Encode.$int(model.game_id)}]));}
    };
    return _elm.DotsAndBoxes.WebSocketsPush.values = {_op: _op,modelToWebSocketsPayload: modelToWebSocketsPayload};

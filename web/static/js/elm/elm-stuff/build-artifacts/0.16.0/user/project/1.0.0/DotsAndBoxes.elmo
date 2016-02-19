@@ -39,6 +39,7 @@ Elm.DotsAndBoxes.make = function (_elm) {
       {case "SignUp": return true;
          case "StartGame": return true;
          case "ClaimSide": return true;
+         case "UpdatePlayerGuid": return true;
          default: return false;}
    };
    var inputs = $Signal.mergeMany(A2($Basics._op["++"],_U.list([actions.signal]),inboundPorts));

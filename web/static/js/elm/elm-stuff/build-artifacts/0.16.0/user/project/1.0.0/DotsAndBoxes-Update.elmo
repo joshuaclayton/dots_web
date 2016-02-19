@@ -9,28 +9,44 @@ Elm.DotsAndBoxes.Update.make = function (_elm) {
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $DotsAndBoxes$Decode = Elm.DotsAndBoxes.Decode.make(_elm),
+   $DotsAndBoxes$ListExtras = Elm.DotsAndBoxes.ListExtras.make(_elm),
    $DotsAndBoxes$Model = Elm.DotsAndBoxes.Model.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
+   var playerFromGuid = F2(function (guid,lobby) {
+      return A2($DotsAndBoxes$ListExtras.detect,function (player) {    return _U.eq(player.id,guid);},lobby.game.players);
+   });
+   var playerToAssign = F3(function (player,guid,lobby) {
+      var _p0 = player;
+      if (_p0.ctor === "Nothing") {
+            return A2(playerFromGuid,guid,lobby);
+         } else {
+            return $Maybe.Just(_p0._0);
+         }
+   });
    var update = F2(function (action,model) {
       var newPlayer = _U.update($DotsAndBoxes$Model.nullPlayer,{name: A2($Maybe.withDefault,"",model.player_name),id: model.player_guid});
       var modelWithAction = _U.update(model,{last_action: action});
-      var _p0 = action;
-      switch (_p0.ctor)
+      var _p1 = action;
+      switch (_p1.ctor)
       {case "NoOp": return modelWithAction;
-         case "UpdateGameState": return _U.update(modelWithAction,{lobby: $DotsAndBoxes$Decode.decodeLobby(_p0._0)});
-         case "UpdateGameId": return _U.update(modelWithAction,{game_id: _p0._0});
-         case "UpdatePlayerGuid": return _U.update(modelWithAction,{player_guid: _p0._0});
-         case "SetPlayerName": if (_p0._0 === "") {
+         case "UpdateGameState": var lobby = $DotsAndBoxes$Decode.decodeLobby(_p1._0);
+           var player = A3(playerToAssign,model.player,model.player_guid,lobby);
+           return _U.update(modelWithAction,{lobby: lobby,player: player});
+         case "UpdateGameId": return _U.update(modelWithAction,{game_id: _p1._0});
+         case "UpdatePlayerGuid": var _p2 = _p1._0;
+           var player = A3(playerToAssign,model.player,_p2,model.lobby);
+           return _U.update(modelWithAction,{player_guid: _p2,player: player});
+         case "SetPlayerName": if (_p1._0 === "") {
                  return _U.update(modelWithAction,{player_name: $Maybe.Nothing});
               } else {
-                 return _U.update(modelWithAction,{player_name: $Maybe.Just(_p0._0)});
+                 return _U.update(modelWithAction,{player_name: $Maybe.Just(_p1._0)});
               }
          case "SignUp": return _U.update(modelWithAction,{player: $Maybe.Just(newPlayer)});
-         case "ChooseSize": return _U.update(modelWithAction,{board_size: _p0._0});
+         case "ChooseSize": return _U.update(modelWithAction,{board_size: _p1._0});
          case "StartGame": return modelWithAction;
          default: return modelWithAction;}
    });

@@ -1,7 +1,8 @@
-module DotsAndBoxes.Update where
+module DotsAndBoxes.Update (update) where
 
-import DotsAndBoxes.Model exposing (Action, Model, nullPlayer)
-import DotsAndBoxes.Decode exposing (decodeLobby)
+import DotsAndBoxes.Model exposing (..)
+import DotsAndBoxes.Decode exposing (..)
+import DotsAndBoxes.ListExtras exposing (detect)
 
 update : Action -> Model -> Model
 update action model =
@@ -10,9 +11,14 @@ update action model =
   in
   case action of
     DotsAndBoxes.Model.NoOp -> modelWithAction
-    DotsAndBoxes.Model.UpdateGameState payload -> { modelWithAction | lobby = decodeLobby payload }
+    DotsAndBoxes.Model.UpdateGameState payload ->
+      let lobby = decodeLobby payload
+          player = playerToAssign model.player model.player_guid lobby
+      in { modelWithAction | lobby = lobby, player = player }
     DotsAndBoxes.Model.UpdateGameId game_id -> { modelWithAction | game_id = game_id }
-    DotsAndBoxes.Model.UpdatePlayerGuid guid -> { modelWithAction | player_guid = guid }
+    DotsAndBoxes.Model.UpdatePlayerGuid guid ->
+      let player = playerToAssign model.player guid model.lobby
+      in { modelWithAction | player_guid = guid, player = player }
     DotsAndBoxes.Model.SetPlayerName "" -> { modelWithAction | player_name = Nothing }
     DotsAndBoxes.Model.SetPlayerName name -> { modelWithAction | player_name = Just name }
     DotsAndBoxes.Model.SignUp -> { modelWithAction | player = Just newPlayer }
@@ -20,3 +26,12 @@ update action model =
     DotsAndBoxes.Model.StartGame -> modelWithAction
     DotsAndBoxes.Model.ClaimSide square side -> modelWithAction
 
+playerToAssign : Maybe Player -> Guid -> Lobby -> Maybe Player
+playerToAssign player guid lobby =
+  case player of
+    Nothing -> playerFromGuid guid lobby
+    Just val -> Just val
+
+playerFromGuid : Guid -> Lobby -> Maybe Player
+playerFromGuid guid lobby =
+  detect (\player -> player.id == guid) lobby.game.players

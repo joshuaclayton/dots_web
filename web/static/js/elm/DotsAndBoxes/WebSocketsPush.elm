@@ -25,6 +25,12 @@ modelToWebSocketsPayload model =
       , ("position", string (side |> sideToString))
       , ("action", string "game:claim")
       ]
+
+    DotsAndBoxes.Model.UpdatePlayerGuid guid ->
+      object [ ("game_id", int model.game_id)
+      , ("player", string guid)
+      , ("action", string "player:rejoin")
+      ]
     _ ->
       object
         [ ("game_id", int model.game_id) ]
