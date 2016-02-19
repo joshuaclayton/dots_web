@@ -1,9 +1,9 @@
 module DotsAndBoxes.View where
 
 import Html exposing (..)
-import Html.Attributes exposing (class, type', value)
+import Html.Attributes exposing (class, type', value, disabled)
 import Signal exposing (Address)
-import DotsAndBoxes.Model exposing (Action, Model)
+import DotsAndBoxes.Model exposing (..)
 import DotsAndBoxes.RegistrationView exposing (registrationView)
 import DotsAndBoxes.PendingImplementationView exposing (pendingImplementationView)
 import DotsAndBoxes.ScoreView exposing (scoreView)
@@ -41,18 +41,21 @@ waitingForOtherPlayersView address model =
   section
     [class "modal"]
     [ playersList model.lobby.game.players
-    , startGameForm address
+    , startGameForm address model.lobby.game.players
     ]
 
-startGameForm : Address Action -> Html
-startGameForm address =
+startGameForm : Address Action -> List Player -> Html
+startGameForm address players =
+  let ableToStartGame = List.length players > 1
+      buttonText = if ableToStartGame then "Start the game" else "Waiting for more players"
+  in
   form
     [onSubmit address DotsAndBoxes.Model.StartGame]
     [ ul
       []
       [
         li [] [
-          input [type' "submit", value "Start the game"] []
+          input [type' "submit", value buttonText, disabled (not ableToStartGame)] []
         ]
       ]
     ]

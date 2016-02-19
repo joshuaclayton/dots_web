@@ -21,19 +21,23 @@ Elm.DotsAndBoxes.View.make = function (_elm) {
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
-   var startGameForm = function (address) {
+   var startGameForm = F2(function (address,players) {
+      var ableToStartGame = _U.cmp($List.length(players),1) > 0;
+      var buttonText = ableToStartGame ? "Start the game" : "Waiting for more players";
       return A2($Html.form,
       _U.list([A2($DotsAndBoxes$CustomEvent.onSubmit,address,$DotsAndBoxes$Model.StartGame)]),
       _U.list([A2($Html.ul,
       _U.list([]),
       _U.list([A2($Html.li,
       _U.list([]),
-      _U.list([A2($Html.input,_U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value("Start the game")]),_U.list([]))]))]))]));
-   };
+      _U.list([A2($Html.input,
+      _U.list([$Html$Attributes.type$("submit"),$Html$Attributes.value(buttonText),$Html$Attributes.disabled($Basics.not(ableToStartGame))]),
+      _U.list([]))]))]))]));
+   });
    var waitingForOtherPlayersView = F2(function (address,model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("modal")]),
-      _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players),startGameForm(address)]));
+      _U.list([$DotsAndBoxes$PlayersView.playersList(model.lobby.game.players),A2(startGameForm,address,model.lobby.game.players)]));
    });
    var startedView = F2(function (address,model) {
       var _p0 = model.lobby.game.completed;
