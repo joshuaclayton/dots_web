@@ -1,11 +1,7 @@
-<div id="game"></div>
 <div id="game-elm"></div>
 
 <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function(event) {
-    var game = new Game(<%= @game_id %>, window.channel);
-    game.register();
-
     new ElmRunner({
       channel: window.channel,
       element: document.getElementById('game-elm'),
