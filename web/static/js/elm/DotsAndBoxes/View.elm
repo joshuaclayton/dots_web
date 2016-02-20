@@ -40,7 +40,8 @@ waitingForOtherPlayersView : Address Action -> Model -> Html
 waitingForOtherPlayersView address model =
   section
     [class "modal"]
-    [ playersList model.lobby.game.players
+    [ p [] [text "Share this URL with your friends so they can get in on the action!"]
+    , playersList model.lobby.game.players
     , startGameForm address model.lobby.game.players
     ]
 
