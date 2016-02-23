@@ -33,7 +33,7 @@ notStartedView address model =
 startedView : Address Action -> Model -> Html
 startedView address model =
   case model.lobby.game.completed of
-    True -> scoreView model.lobby.game.score
+    True -> scoreView address model.lobby.game.score
     False -> board address model
 
 waitingForOtherPlayersView : Address Action -> Model -> Html

@@ -1,10 +1,10 @@
 defmodule DotsWeb.Channels.GameChannel do
   use Phoenix.Channel
 
-  def handle_in("game:begin", %{"game_id" => id, "player" => player, "width" => width, "height" => height}, socket) do
+  def handle_in("game:begin", %{"game_id" => id, "player" => %{"id" => player_id, "name" => player_name}, "width" => width, "height" => height}, socket) do
     game_id = id |> input_to_integer
 
-    DotsWeb.Game.configure(game_id, %{player: player, width: width |> input_to_integer, height: height |> input_to_integer})
+    DotsWeb.Game.configure(game_id, %{player: %{id: player_id, name: player_name}, width: width |> input_to_integer, height: height |> input_to_integer})
 
     broadcast_game_update(socket, game_id)
     {:noreply, socket}
@@ -21,6 +21,15 @@ defmodule DotsWeb.Channels.GameChannel do
     |> DotsWeb.Game.update(game_id)
 
     broadcast_game_update(socket, game_id)
+    {:noreply, socket}
+  end
+
+  def handle_in("game:playagain", %{"game_id" => id}, socket) do
+    game_id = id |> input_to_integer
+
+    {:ok, new_game_id} = DotsWeb.Game.play_again game_id
+
+    broadcast!(socket, "game:newgame:#{game_id}", %{new_game_id: new_game_id})
     {:noreply, socket}
   end
 

@@ -14,6 +14,7 @@ type Action
   | SignUp
   | StartGame
   | ClaimSide Square SquareSide
+  | PlayAgain
 
 type SquareSide = Top | Right | Bottom | Left | UnknownSide
 

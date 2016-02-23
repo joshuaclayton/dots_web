@@ -52,6 +52,10 @@ export default class ElmRunner {
       console.log('receiving payload', payload);
       this.game.ports.setState.send(payload.lobby);
     });
+
+    this.channel.on(`game:newgame:${this.gameId}`, payload => {
+      window.location.href = `/games/${payload.new_game_id}`;
+    });
   }
 
   _buildGame() {

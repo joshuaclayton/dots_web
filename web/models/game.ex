@@ -1,6 +1,12 @@
 defmodule DotsWeb.Game do
   use GenServer
 
+  def start_game do
+    :random.seed :os.timestamp
+    random_id = :random.uniform(1_000_000_000)
+    {:ok, random_id, start(random_id)}
+  end
+
   def start(game_id) do
     find(game_id) || create_game(game_id)
   end
@@ -26,12 +32,32 @@ defmodule DotsWeb.Game do
     |> update(game_id)
   end
 
+  def play_again(old_game_id) do
+    old_lobby = find(old_game_id)
+    {:ok, new_game_id, new_lobby} = DotsWeb.Game.start_game
+
+    new_lobby
+    |> choose_dimensions(old_lobby.width, old_lobby.height)
+    |> update(new_game_id)
+
+    old_lobby.game.players
+    |> Enum.each(fn player ->
+      configure new_game_id, %{player: player, width: 0, height: 0}
+    end)
+
+    find(new_game_id)
+    |> Dots.Lobby.start
+    |> update(new_game_id)
+
+    {:ok, new_game_id}
+  end
+
   defp create_game(game_id) do
     GenServer.call(__MODULE__, {:update, game_id, Dots.Lobby.new})
   end
 
-  defp add_player(lobby, player) do
-    Dots.Lobby.add_player(lobby, %{id: player["id"], name: player["name"]})
+  defp add_player(lobby, %{id: id, name: name}) do
+    Dots.Lobby.add_player(lobby, %{id: id, name: name})
   end
 
   defp choose_dimensions(lobby, width, height) do

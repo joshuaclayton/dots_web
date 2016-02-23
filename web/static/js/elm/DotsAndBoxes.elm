@@ -21,6 +21,7 @@ isUpdateableAction model =
     DotsAndBoxes.Model.StartGame -> True
     DotsAndBoxes.Model.ClaimSide square side -> True
     DotsAndBoxes.Model.UpdatePlayerGuid guid -> True
+    DotsAndBoxes.Model.PlayAgain -> True
     _ -> False
 
 outboundModel : Signal Model

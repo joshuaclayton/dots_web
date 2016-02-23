@@ -2,9 +2,7 @@ defmodule DotsWeb.GameController do
   use DotsWeb.Web, :controller
 
   def random(conn, _params) do
-    :random.seed :os.timestamp
-
-    random_id = :random.uniform(1_000_000_000)
+    {:ok, random_id, _} = DotsWeb.Game.start_game
     redirect conn, to: game_path(conn, :show, random_id)
   end
 

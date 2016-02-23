@@ -1,14 +1,32 @@
 module DotsAndBoxes.ScoreView (scoreView) where
 
 import Html exposing (..)
-import Html.Attributes exposing (class)
-import DotsAndBoxes.Model exposing (Score, PlayerScore)
+import DotsAndBoxes.CustomEvent exposing (onSubmit)
+import Html.Attributes exposing (class, value, type')
+import DotsAndBoxes.Model exposing (..)
 
-scoreView : Score -> Html
-scoreView score =
+scoreView : Signal.Address Action -> Score -> Html
+scoreView address score =
   section [class "modal"] [ h2 [] [text "Winner: ", winnersList score]
   , scoresBreakdown score.scores
+  , playAgain address
   ]
+
+playAgain : Signal.Address Action -> Html
+playAgain address =
+  form
+    [onSubmit address PlayAgain]
+    [
+      ul
+        []
+        [
+          li [] [
+            input
+              [type' "submit", value "Play another!"]
+              []
+          ]
+        ]
+    ]
 
 winnersList : Score -> Html
 winnersList score =

@@ -31,6 +31,11 @@ modelToWebSocketsPayload model =
       , ("player", string guid)
       , ("action", string "player:rejoin")
       ]
+
+    DotsAndBoxes.Model.PlayAgain ->
+      object [ ("game_id", int model.game_id)
+      , ("action", string "game:playagain")
+      ]
     _ ->
       object
         [ ("game_id", int model.game_id) ]
