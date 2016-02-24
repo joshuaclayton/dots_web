@@ -1,18 +1,13 @@
 module DotsAndBoxes where
 
+import StartApp
+import Effects exposing (Never, Effects)
 import DotsAndBoxes.Model exposing (nullModel, nullPlayer, isCurrentPlayer, Model, Action, Guid)
 import DotsAndBoxes.View exposing (mainView)
 import DotsAndBoxes.Update exposing (update)
 import DotsAndBoxes.WebSocketsPush exposing (modelToWebSocketsPayload)
 import Html exposing (Html)
 import Json.Encode as Json
-
-model : Signal Model
-model = Signal.foldp update nullModel inputs
-
-inputs : Signal Action
-inputs =
-  Signal.mergeMany ([actions.signal] ++ inboundPorts)
 
 isUpdateableAction : Model -> Bool
 isUpdateableAction model =
@@ -26,18 +21,19 @@ isUpdateableAction model =
 
 outboundModel : Signal Model
 outboundModel =
-  Signal.filter isUpdateableAction nullModel model
+  Signal.filter isUpdateableAction nullModel app.model
 
 outboundActionsPayload : Signal Json.Value
 outboundActionsPayload =
   Signal.map modelToWebSocketsPayload outboundModel
 
-actions : Signal.Mailbox Action
-actions =
-  Signal.mailbox DotsAndBoxes.Model.NoOp
+noEffects : a -> (a, Effects b)
+noEffects thing = (thing, Effects.none)
 
-inboundPorts : List (Signal Action)
-inboundPorts =
+init = noEffects nullModel
+
+inputs : List (Signal Action)
+inputs =
   [ DotsAndBoxes.Model.UpdateGameId `fromPort` setGameId
   , DotsAndBoxes.Model.UpdateGameState `fromPort` setState
   , DotsAndBoxes.Model.UpdatePlayerGuid `fromPort` setPlayerGuid
@@ -47,9 +43,6 @@ inboundPorts =
 fromPort : (a -> b) -> Signal a -> Signal b
 fromPort action inboundPort =
   (Signal.map <| action) inboundPort
-
-main : Signal Html
-main = Signal.map (mainView actions.address) model
 
 port setGameId : Signal Int
 port setPlayerGuid : Signal Guid
@@ -62,4 +55,8 @@ port broadcastUpdates =
 
 port broadcastIsCurrentPlayer : Signal Bool
 port broadcastIsCurrentPlayer =
-  (Signal.map isCurrentPlayer model) |> Signal.dropRepeats
+  (Signal.map isCurrentPlayer app.model) |> Signal.dropRepeats
+
+app = StartApp.start { init = init, view = mainView, update = update, inputs = inputs }
+
+main = app.html
