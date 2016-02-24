@@ -41,6 +41,7 @@ inboundPorts =
   [ DotsAndBoxes.Model.UpdateGameId `fromPort` setGameId
   , DotsAndBoxes.Model.UpdateGameState `fromPort` setState
   , DotsAndBoxes.Model.UpdatePlayerGuid `fromPort` setPlayerGuid
+  , DotsAndBoxes.Model.UpdateClaimedSide `fromPort` setClaimedSide
   ]
 
 fromPort : (a -> b) -> Signal a -> Signal b
@@ -53,6 +54,7 @@ main = Signal.map (mainView actions.address) model
 port setGameId : Signal Int
 port setPlayerGuid : Signal Guid
 port setState : Signal Json.Value
+port setClaimedSide : Signal Json.Value
 
 port broadcastUpdates : Signal String
 port broadcastUpdates =

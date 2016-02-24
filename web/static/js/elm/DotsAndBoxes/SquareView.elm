@@ -29,8 +29,10 @@ playerColor player =
 squareSide : Address Action -> Model -> Square -> SquareSide -> Html
 squareSide address model square side =
   let claimedSides = List.map .position square.claims
+      lastClaimedSide = model.last_claimed_side
+      justClaimed = lastClaimedSide.position == side && lastClaimedSide.x == square.coordinates.x && lastClaimedSide.y == square.coordinates.y
   in
-    li [ classList [(sideToString side, True), ("claimed", isSideClaimed claimedSides side)]
+    li [ classList [(sideToString side, True), ("just-claimed", justClaimed), ("claimed", isSideClaimed claimedSides side)]
     , onClick address (actionBasedOnTurn model square side)
     ] []
 

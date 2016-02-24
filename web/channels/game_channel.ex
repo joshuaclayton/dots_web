@@ -21,6 +21,8 @@ defmodule DotsWeb.Channels.GameChannel do
     |> DotsWeb.Game.update(game_id)
 
     broadcast_game_update(socket, game_id)
+
+    broadcast!(socket, "game:claimed:#{game_id}", %{position: position, x: x, y: y})
     {:noreply, socket}
   end
 

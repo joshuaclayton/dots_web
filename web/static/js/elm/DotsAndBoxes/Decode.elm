@@ -1,15 +1,21 @@
-module DotsAndBoxes.Decode (decodeLobby) where
+module DotsAndBoxes.Decode (decodeLobby, decodeClaimedSide) where
 
 import Json.Encode as Json
 import Json.Decode exposing (Decoder, maybe, null, oneOf, decodeValue, list, succeed, andThen, int, string, bool, (:=))
 import Json.Decode.Extra exposing ((|:))
-import DotsAndBoxes.Model exposing (nullLobby, nullPlayer, SquareSide, Lobby, Game, Claim, Board, Score, Square, Coordinate, Player, PlayerScore, GameStatus)
+import DotsAndBoxes.Model exposing (..)
 
 decodeLobby : Json.Value -> Lobby
 decodeLobby payload =
   case decodeValue lobby payload of
     Ok val -> val
     Err message -> nullLobby
+
+decodeClaimedSide : Json.Value -> Side
+decodeClaimedSide payload =
+  case decodeValue claimedSide payload of
+    Ok val -> val
+    Err message -> nullSide
 
 lobbyStatus : String -> GameStatus
 lobbyStatus status =
@@ -38,6 +44,13 @@ decodeStatus status =
 decodeWinners : Maybe (List Player) -> Decoder (List Player)
 decodeWinners players =
   succeed (Maybe.withDefault [] players)
+
+claimedSide: Decoder Side
+claimedSide =
+  succeed Side
+    |: ("x" := int)
+    |: ("y" := int)
+    |: (("position" := string) `andThen` decodePosition)
 
 player : Decoder Player
 player =

@@ -3,6 +3,7 @@ $red: #E74C3C;
 $light-gray: #ECF0F1;
 $brighter-blue: #3498DB;
 $bright-blue: #2980B9;
+$highlight-base: adjust-hue($red, 30deg);
 $white: #FFF;
 $serif-family: "Lora", serif;
 $sans-serif-family: "Open Sans Condensed", sans-serif;
@@ -52,6 +53,19 @@ body {
   line-height: 0;
 }
 
+@keyframes flash-highlight {
+  0% {
+    background: $highlight-base;
+  }
+  50% {
+    background: darken($highlight-base, 15%);
+  }
+  100% {
+    background: $highlight-base;
+  }
+}
+
+
 .square {
   &:nth-of-type(1) { margin-left: 0; }
 
@@ -68,6 +82,10 @@ body {
     &:hover, &.claimed {
       cursor: pointer;
       background: darken($brighter-blue, 20%);
+    }
+
+    &.just-claimed {
+      animation: flash-highlight 1s infinite;
     }
   }
 }

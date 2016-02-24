@@ -8,6 +8,7 @@ type Action
   = NoOp
   | UpdateGameId Int
   | UpdateGameState Json.Value
+  | UpdateClaimedSide Json.Value
   | UpdatePlayerGuid Guid
   | SetPlayerName String
   | ChooseSize Int
@@ -19,6 +20,12 @@ type Action
 type SquareSide = Top | Right | Bottom | Left | UnknownSide
 
 type alias Guid = String
+
+type alias Side =
+  { x: Int
+  , y: Int
+  , position: SquareSide
+  }
 
 type alias Player =
   { name: String
@@ -77,6 +84,7 @@ type alias Model =
   , last_action: Action
   , player: Maybe Player
   , player_guid: Guid
+  , last_claimed_side: Side
   }
 
 isCurrentPlayer : Model -> Bool
@@ -85,6 +93,9 @@ isCurrentPlayer model =
       currentPlayer = model.lobby.game.current_player
   in
     thisPlayer.id == currentPlayer.id && model.lobby.status == Started
+
+nullSide : Side
+nullSide = { x = 0, y = 0, position = UnknownSide }
 
 nullPlayer : Player
 nullPlayer = { name = "", active = True, id = "" }
@@ -102,4 +113,4 @@ nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }
 
 nullModel : Model
-nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp, player = Nothing, player_guid = "" }
+nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp, player = Nothing, player_guid = "", last_claimed_side = nullSide }

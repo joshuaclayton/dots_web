@@ -15,6 +15,9 @@ update action model =
       let lobby = decodeLobby payload
           player = playerToAssign model.player model.player_guid lobby
       in { modelWithAction | lobby = lobby, player = player }
+    DotsAndBoxes.Model.UpdateClaimedSide payload ->
+      let claimedSide = decodeClaimedSide payload
+      in { modelWithAction | last_claimed_side = claimedSide }
     DotsAndBoxes.Model.UpdateGameId game_id -> { modelWithAction | game_id = game_id }
     DotsAndBoxes.Model.UpdatePlayerGuid guid ->
       let player = playerToAssign model.player guid model.lobby

@@ -53,6 +53,10 @@ export default class ElmRunner {
       this.game.ports.setState.send(payload.lobby);
     });
 
+    this.channel.on(`game:claimed:${this.gameId}`, payload => {
+      this.game.ports.setClaimedSide.send(payload);
+    });
+
     this.channel.on(`game:newgame:${this.gameId}`, payload => {
       window.location.href = `/games/${payload.new_game_id}`;
     });
@@ -67,6 +71,6 @@ export default class ElmRunner {
   }
 
   get _elmDefaultState() {
-    return { setGameId: 0, setState: {}, setPlayerGuid: "" };
+    return { setGameId: 0, setState: {}, setPlayerGuid: "", setClaimedSide: {} };
   }
 }
