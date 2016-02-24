@@ -1,4 +1,4 @@
-module DotsAndBoxes.RegistrationView where
+module DotsAndBoxes.RegistrationView (registrationView) where
 
 import Html exposing (..)
 import Html.Events exposing (on, targetValue, onClick)

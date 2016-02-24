@@ -1,4 +1,4 @@
-module DotsAndBoxes.CustomEvent where
+module DotsAndBoxes.CustomEvent (onSubmit) where
 
 import Html exposing (..)
 import Html.Events exposing (onWithOptions, defaultOptions)

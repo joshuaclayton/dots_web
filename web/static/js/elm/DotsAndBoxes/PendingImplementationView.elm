@@ -1,4 +1,4 @@
-module DotsAndBoxes.PendingImplementationView where
+module DotsAndBoxes.PendingImplementationView (pendingImplementationView) where
 
 import Html exposing (..)
 import Html.Attributes exposing (class)

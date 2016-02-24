@@ -1,4 +1,4 @@
-module DotsAndBoxes.View where
+module DotsAndBoxes.View (mainView) where
 
 import Html exposing (..)
 import Html.Attributes exposing (class, type', value, disabled)
