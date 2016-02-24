@@ -30,12 +30,15 @@ export default class ElmRunner {
   }
 
   _subscribeToUpdates() {
-    this.game.ports.broadcastUpdates.subscribe(data => {
-      var clonedData = Object.assign({}, JSON.parse(data));
-      var action = clonedData.action;
-      delete(clonedData.action);
+    this.game.ports.broadcastUpdates.subscribe(payload => {
+      const data = JSON.parse(payload);
+      const action = data.action;
 
-      this.channel.push(action, clonedData);
+      delete(data.action);
+
+      if (action) {
+        this.channel.push(action, data);
+      }
     });
   }
 
