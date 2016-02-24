@@ -1,12 +1,10 @@
 module DotsAndBoxes.Update (update) where
 
-import Effects exposing (Never, Effects)
+import Effects exposing (Effects)
 import DotsAndBoxes.Model exposing (..)
 import DotsAndBoxes.Decode exposing (..)
 import DotsAndBoxes.ListExtras exposing (detect)
-
-noEffects : a -> (a, Effects b)
-noEffects thing = (thing, Effects.none)
+import DotsAndBoxes.Effect exposing (..)
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =

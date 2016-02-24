@@ -1,7 +1,25 @@
-module DotsAndBoxes.WebSocketsPush (modelToWebSocketsPayload) where
+module DotsAndBoxes.WebSocketsPush (signal) where
 
-import Json.Encode as Json exposing (object, string, int)
-import DotsAndBoxes.Model exposing (Model, SquareSide)
+import Json.Encode as Json exposing (encode, object, string, int)
+import DotsAndBoxes.Model exposing (nullModel, Model, SquareSide)
+
+signal : Signal Model -> Signal String
+signal model =
+  Signal.map (\model' -> encode 0 (modelToWebSocketsPayload model')) (outboundModel model)
+
+isUpdateableAction : Model -> Bool
+isUpdateableAction model =
+  case model.last_action of
+    DotsAndBoxes.Model.SignUp -> True
+    DotsAndBoxes.Model.StartGame -> True
+    DotsAndBoxes.Model.ClaimSide square side -> True
+    DotsAndBoxes.Model.UpdatePlayerGuid guid -> True
+    DotsAndBoxes.Model.PlayAgain -> True
+    _ -> False
+
+outboundModel : Signal Model -> Signal Model
+outboundModel model =
+  Signal.filter isUpdateableAction nullModel model
 
 modelToWebSocketsPayload : Model -> Json.Value
 modelToWebSocketsPayload model =
