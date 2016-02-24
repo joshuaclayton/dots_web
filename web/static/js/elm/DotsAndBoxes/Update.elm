@@ -10,8 +10,7 @@ update : Action -> Model -> (Model, Effects Action)
 update action model =
   let modelWithAction = { model | last_action = action }
       newPlayer = { nullPlayer | name = Maybe.withDefault "" model.player_name, id = model.player_guid }
-  in
-  case action of
+  in case action of
     DotsAndBoxes.Model.NoOp -> noEffects modelWithAction
     DotsAndBoxes.Model.UpdateGameState payload ->
       let lobby = decodeLobby payload
@@ -34,10 +33,7 @@ update action model =
 
 playerToAssign : Maybe Player -> Guid -> Lobby -> Maybe Player
 playerToAssign player guid lobby =
-  case player of
-    Nothing -> playerFromGuid guid lobby
+  let playerFromGuid guid players = detect (\player -> player.id == guid) players
+  in case player of
+    Nothing -> playerFromGuid guid lobby.game.players
     Just val -> Just val
-
-playerFromGuid : Guid -> Lobby -> Maybe Player
-playerFromGuid guid lobby =
-  detect (\player -> player.id == guid) lobby.game.players
