@@ -4,12 +4,12 @@ import Html exposing (..)
 import Html.Attributes exposing (class, type', value, disabled)
 import Signal exposing (Address)
 import DotsAndBoxes.Model exposing (..)
-import DotsAndBoxes.RegistrationView exposing (registrationView)
 import DotsAndBoxes.PendingImplementationView exposing (pendingImplementationView)
 import DotsAndBoxes.ScoreView exposing (scoreView)
 import DotsAndBoxes.PlayersView exposing (playersList)
 import DotsAndBoxes.BoardView exposing (board)
 import DotsAndBoxes.CustomEvent exposing (onSubmit)
+import DotsAndBoxes.PlayerRegistration
 
 mainView : Address Action -> Model -> Html
 mainView address model =
@@ -27,7 +27,7 @@ loadingView =
 notStartedView : Address Action -> Model -> Html
 notStartedView address model =
   case model.player of
-    Nothing -> registrationView address model
+    Nothing -> DotsAndBoxes.PlayerRegistration.view (Signal.forwardTo address HandlePlayerRegistration) model.registration
     _ -> waitingForOtherPlayersView address model
 
 startedView : Address Action -> Model -> Html

@@ -1,6 +1,7 @@
 module DotsAndBoxes.Model where
 
 import Json.Encode as Json
+import DotsAndBoxes.PlayerRegistration
 
 type GameStatus = Unknown | NotStarted | Started
 
@@ -10,9 +11,7 @@ type Action
   | UpdateGameState Json.Value
   | UpdateClaimedSide Json.Value
   | UpdatePlayerGuid Guid
-  | SetPlayerName String
-  | ChooseSize Int
-  | SignUp
+  | HandlePlayerRegistration DotsAndBoxes.PlayerRegistration.Action
   | StartGame
   | ClaimSide Square SquareSide
   | PlayAgain
@@ -79,12 +78,11 @@ type alias Lobby =
 type alias Model =
   { lobby: Lobby
   , game_id: Int
-  , player_name: Maybe String
-  , board_size: Int
   , last_action: Action
   , player: Maybe Player
   , player_guid: Guid
   , last_claimed_side: Side
+  , registration: DotsAndBoxes.PlayerRegistration.Model
   }
 
 isCurrentPlayer : Model -> Bool
@@ -113,4 +111,4 @@ nullLobby : Lobby
 nullLobby = { width = 0, height = 0, status = Unknown, game = nullGame }
 
 nullModel : Model
-nullModel = { game_id = 0, lobby = nullLobby, player_name = Nothing, board_size = 0, last_action = NoOp, player = Nothing, player_guid = "", last_claimed_side = nullSide }
+nullModel = { game_id = 0, lobby = nullLobby, last_action = NoOp, player = Nothing, player_guid = "", last_claimed_side = nullSide, registration = DotsAndBoxes.PlayerRegistration.initialModel }

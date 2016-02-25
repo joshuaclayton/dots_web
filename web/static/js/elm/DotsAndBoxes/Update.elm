@@ -5,17 +5,18 @@ import DotsAndBoxes.Model exposing (..)
 import DotsAndBoxes.Decode exposing (..)
 import DotsAndBoxes.ListExtras exposing (detect)
 import DotsAndBoxes.Effect exposing (..)
+import DotsAndBoxes.PlayerRegistration
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   let modelWithAction = { model | last_action = action }
-      newPlayer = { nullPlayer | name = Maybe.withDefault "" model.player_name, id = model.player_guid }
   in case action of
     DotsAndBoxes.Model.NoOp -> noEffects modelWithAction
     DotsAndBoxes.Model.UpdateGameState payload ->
       let lobby = decodeLobby payload
           player = playerToAssign model.player model.player_guid lobby
-      in noEffects { modelWithAction | lobby = lobby, player = player }
+          newRegistration = DotsAndBoxes.PlayerRegistration.updateWithBoardSize model.registration lobby.width
+      in noEffects { modelWithAction | lobby = lobby, player = player, registration = newRegistration }
     DotsAndBoxes.Model.UpdateClaimedSide payload ->
       let claimedSide = decodeClaimedSide payload
       in noEffects { modelWithAction | last_claimed_side = claimedSide }
@@ -23,10 +24,10 @@ update action model =
     DotsAndBoxes.Model.UpdatePlayerGuid guid ->
       let player = playerToAssign model.player guid model.lobby
       in noEffects { modelWithAction | player_guid = guid, player = player }
-    DotsAndBoxes.Model.SetPlayerName "" -> noEffects { modelWithAction | player_name = Nothing }
-    DotsAndBoxes.Model.SetPlayerName name -> noEffects { modelWithAction | player_name = Just name }
-    DotsAndBoxes.Model.SignUp -> noEffects { modelWithAction | player = Just newPlayer }
-    DotsAndBoxes.Model.ChooseSize board_size -> noEffects { modelWithAction | board_size = board_size }
+    DotsAndBoxes.Model.HandlePlayerRegistration act ->
+      let (newRegistration, effects) = DotsAndBoxes.PlayerRegistration.update act model.registration
+          resultModel = { modelWithAction | registration = newRegistration }
+      in noEffects { resultModel | player = registrationPlayer newRegistration model.player_guid }
     DotsAndBoxes.Model.StartGame -> noEffects modelWithAction
     DotsAndBoxes.Model.PlayAgain -> noEffects modelWithAction
     DotsAndBoxes.Model.ClaimSide square side -> noEffects modelWithAction
@@ -37,3 +38,8 @@ playerToAssign player guid lobby =
   in case player of
     Nothing -> playerFromGuid guid lobby.game.players
     Just val -> Just val
+
+registrationPlayer : DotsAndBoxes.PlayerRegistration.Model -> Guid -> Maybe Player
+registrationPlayer registration guid =
+  let buildPlayer = { nullPlayer | name = Maybe.withDefault "" registration.player_name, id = guid }
+  in if registration.signup_complete then Just buildPlayer else Nothing
