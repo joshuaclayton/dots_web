@@ -9,44 +9,42 @@ signal model =
 
 modelToWebSocketsPayload : Model -> Json.Value
 modelToWebSocketsPayload model =
-  case model.last_action of
+  let basePayload list = object <| ("game_id", int model.game_id) :: list
+      playerName = (Maybe.withDefault nullPlayer model.player).name
+  in case model.last_action of
     DotsAndBoxes.Model.HandlePlayerRegistration _ ->
       if model.registration.signup_complete then
-        object [ ("game_id", int model.game_id)
-        , ("width", int model.registration.board_size)
+        basePayload [
+          ("width", int model.registration.board_size)
         , ("height", int model.registration.board_size)
-        , ("player", object [("name", string ((Maybe.withDefault nullPlayer model.player).name)), ("id", string model.player_guid)])
+        , ("player", object [("name", string playerName), ("id", string model.player_guid)])
         , ("action", string "game:begin")
         ]
       else
-        object
-          [ ("game_id", int model.game_id) ]
+        basePayload []
+
     DotsAndBoxes.Model.StartGame ->
-      object [ ("game_id", int model.game_id)
-      , ("action", string "game:start")
-      ]
+      basePayload [ ("action", string "game:start") ]
 
     DotsAndBoxes.Model.ClaimSide square side ->
-      object [ ("game_id", int model.game_id)
-      , ("x", int square.coordinates.x)
+      basePayload [
+        ("x", int square.coordinates.x)
       , ("y", int square.coordinates.y)
       , ("position", string (side |> sideToString))
       , ("action", string "game:claim")
       ]
 
     DotsAndBoxes.Model.UpdatePlayerGuid guid ->
-      object [ ("game_id", int model.game_id)
-      , ("player", string guid)
+      basePayload [
+        ("player", string guid)
       , ("action", string "player:rejoin")
       ]
 
     DotsAndBoxes.Model.PlayAgain ->
-      object [ ("game_id", int model.game_id)
-      , ("action", string "game:playagain")
-      ]
+      basePayload [ ("action", string "game:playagain") ]
+
     _ ->
-      object
-        [ ("game_id", int model.game_id) ]
+      basePayload []
 
 sideToString : SquareSide -> String
 sideToString side =
