@@ -34,7 +34,8 @@ type alias Player =
 
 type alias PlayerScore =
   { player: Player
-  , score: Int }
+  , score: Int
+  }
 
 type alias Score =
   { winners: List Player
