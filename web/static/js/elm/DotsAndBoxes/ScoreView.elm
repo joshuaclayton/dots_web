@@ -7,10 +7,14 @@ import DotsAndBoxes.Model exposing (..)
 
 scoreView : Signal.Address Action -> Score -> Html
 scoreView address score =
-  section [class "modal"] [ h2 [] [text "Winner: ", winnersList score]
+  section [class "modal"] [ h2 [] [text <| winnerHeader score, winnersList score]
   , scoresBreakdown score.scores
   , playAgain address
   ]
+
+winnerHeader : Score -> String
+winnerHeader score =
+  if List.length score.winners > 0 then "Winners: " else "Winner: "
 
 playAgain : Signal.Address Action -> Html
 playAgain address =
@@ -30,7 +34,7 @@ playAgain address =
 
 winnersList : Score -> Html
 winnersList score =
-  let winnerNames = List.map .name score.winners
+  let winnerNames = (List.map .name >> List.intersperse ", ") score.winners
   in
     text (winnerNames |> List.foldr (++) "")
 
